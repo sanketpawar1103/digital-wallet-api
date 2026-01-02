@@ -1,0 +1,7 @@
+name,phone,balance,password,pin,history
+Sanket Pawar,8208878187,10001,4912,4912,,2/1/2026, 3:13:51 pm	From : santo k m	Amount : 1
+Satish Pawar,9850908332,5990,1982,1982,,26/12/2025, 6:25:33 am	To : Archana Pawar	Amount : 10
+Archana Pawar,8999005195,1010,1985,1985,26/12/2025, 6:25:33 am	From : Satish Pawar	Amount : 10
+santo k m,1234567890,10000001012,password,1234,2/1/2026, 3:13:51 pm	To : Sanket Pawar	Amount : 1,2/1/2026, 6:09:33 pm	From : Rafiya	Amount : 10,2/1/2026, 6:38:35 pm	From : teja	Amount : 12
+Rafiya,9177564759,5490,rafiya,1111,2/1/2026, 6:09:33 pm	To : santo k m	Amount : 10
+teja,0987654321,123,1234,1234,2/1/2026, 6:38:35 pm	To : santo k m	Amount : 12
