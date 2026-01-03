@@ -1,7 +1,7 @@
 import { promptSecret } from "@std/cli";
 
-const doesExist = (user, users) =>
-  users.some((each) => each.phone === user.phone);
+const doesExist = (user, accounts) =>
+  accounts.some((each) => each.phone === user.phone);
 
 const updateSheet = (to, from, info) => {
   to.history.push(
@@ -18,7 +18,7 @@ const updateSheet = (to, from, info) => {
   from.balance -= info.amount;
 };
 
-const checkBalance = (user, users) => {
+const checkBalance = (user, accounts) => {
   console.log(` ${user.name}\n`);
   const pin = promptSecret(" Enter your pin number :");
   console.clear();
@@ -28,7 +28,7 @@ const checkBalance = (user, users) => {
     : ` ❌ Invalid Pin ${user.name}\n`;
   console.log(msg);
 
-  return grauntAccess(user, users);
+  return grauntAccess(user, accounts);
 };
 
 const readDetails = (user) => {
@@ -41,8 +41,8 @@ const readDetails = (user) => {
   return { phone, amount, pin };
 };
 
-const areValidDetails = (user, users, details) => {
-  const receiver = users.find((each) => each.phone === details.phone);
+const areValidDetails = (user, accounts, details) => {
+  const receiver = accounts.find((each) => each.phone === details.phone);
 
   if (!receiver || receiver.phone === user.phone) {
     console.log(" ❌ Receiver not present\n");
@@ -62,15 +62,15 @@ const areValidDetails = (user, users, details) => {
   return true;
 };
 
-const sendMoney = (user, users) => {
-  if (areValidDetails(user, users, readDetails(user))) {
+const sendMoney = (user, accounts) => {
+  if (areValidDetails(user, accounts, readDetails(user))) {
     console.log(` ✅ Transaction Successfull ${user.name}\n`);
   }
 
-  return grauntAccess(user, users);
+  return grauntAccess(user, accounts);
 };
 
-const getStatements = (user, users) => {
+const getStatements = (user, accounts) => {
   console.log(` ${user.name}\n`);
   const pin = promptSecret("Enter your pin :");
   console.clear();
@@ -80,10 +80,10 @@ const getStatements = (user, users) => {
     : ` ❌ Invalid pin ${user.name}`;
   console.log(msg);
 
-  return grauntAccess(user, users);
+  return grauntAccess(user, accounts);
 };
 
-const addBalance = (user, users) => {
+const addBalance = (user, accounts) => {
   console.log(` ${user.name}\n`);
   const pin = promptSecret("Enter pin :");
   const amount = parseInt(prompt("Enter amount :"));
@@ -91,18 +91,18 @@ const addBalance = (user, users) => {
 
   if (pin !== user.pin || Number.isNaN(amount) || amount < 0) {
     console.log(` ❌ Invalid pin or amount value ${user.name}`);
-    return grauntAccess(user, users);
+    return grauntAccess(user, accounts);
   }
 
   console.log(` ✅ Balance added successfully ${user.name}`);
   user.balance += amount;
-  return grauntAccess(user, users);
+  return grauntAccess(user, accounts);
 };
 
-const exitPage = (_user, users) => {
+const exitPage = (_user, accounts) => {
   console.clear();
 
-  return main(users);
+  return main(accounts);
 };
 
 const ACTIONS = {
@@ -113,7 +113,7 @@ const ACTIONS = {
   5: exitPage,
 };
 
-const grauntAccess = (user, users) => {
+const grauntAccess = (user, accounts) => {
   let msg = `\n 1. Checke balance\n 2. Send money\n `;
   msg += `3. Get statements\n 4. Add balance\n 5. Exit page\n\n`;
   const choice = prompt(msg);
@@ -121,13 +121,13 @@ const grauntAccess = (user, users) => {
 
   if (!(choice in ACTIONS)) {
     console.log(` ❌ Invalid CHOICE ${user.name}`);
-    return grauntAccess(user, users);
+    return grauntAccess(user, accounts);
   }
 
-  return ACTIONS[choice](user, users);
+  return ACTIONS[choice](user, accounts);
 };
 
-const isInValidUser = (user, users) => {
+const isInValidUser = (user, accounts) => {
   console.clear();
   if (!user.name || user.name.includes(",")) {
     console.log(" ❌ Empty name or remove ,\n");
@@ -144,7 +144,7 @@ const isInValidUser = (user, users) => {
   } else if (Number.isNaN(user.balance) || user.balance < 0) {
     console.log(" ❌ Invalid balance amount, \n");
     return true;
-  } else if (doesExist(user, users)) {
+  } else if (doesExist(user, accounts)) {
     console.log(" ❌ User already exists, \n");
     return true;
   }
@@ -173,58 +173,40 @@ const readCredentials = () => {
   return { phone, pass };
 };
 
-const formatUsersData = (users) => {
-  Deno.readTextFileSync("./data.csv")
-    .split("\n")
-    .forEach((each) => {
-      const user = each.split(",");
-      users.push({
-        name: user[0],
-        phone: user[1],
-        balance: user[2],
-        pass: user[3],
-        pin: user[4],
-        history: user.slice(5),
-      });
-    });
-
-  return users;
-};
-
-const authenticateUser = (credentials, users) =>
-  users.find((each) =>
+const authenticateUser = (credentials, accounts) =>
+  accounts.find((each) =>
     each.phone === credentials.phone && each.pass === credentials.pass
   );
 
-const logIn = (users) => {
-  const user = authenticateUser(readCredentials(), users);
+const logIn = (accounts) => {
+  const user = authenticateUser(readCredentials(), accounts);
   console.clear();
 
   if (!user) {
     console.log(" ❌ Credentials missmatch\n");
-    return main(users);
+    return main(accounts);
   }
 
   console.log(`\tWelcome ${user.name}`);
-  return grauntAccess(user, users);
+  return grauntAccess(user, accounts);
 };
 
-const createAccount = (users) => {
+const createAccount = (accounts) => {
   const user = readUserDetails();
-  if (isInValidUser(user, users)) {
-    return main(users);
+  if (isInValidUser(user, accounts)) {
+    return main(accounts);
   }
 
   console.log(" ✅ Account created successfylly\n");
-  users.push(user);
+  accounts.push(user);
 
-  return main(users);
+  return main(accounts);
 };
 
-const exitHome = (users) =>
+const exitHome = (accounts) =>
   Deno.writeTextFileSync(
     "./data.csv",
-    users.map((each) => Object.values(each).join(",")).join("\n"),
+    accounts.map((each) => Object.values(each).join(",")).join("\n"),
   );
 
 const CHOICES = {
@@ -233,16 +215,38 @@ const CHOICES = {
   3: exitHome,
 };
 
-const main = (users) => {
+const main = (accounts) => {
   const choice = prompt(" 1. Create Account\n 2. Log In\n 3. Exit\n\n");
 
   if (!(choice in CHOICES)) {
     console.clear();
     console.log(" ❌ Invalid CHOICE\n");
-    return main(users);
+    return main(accounts);
   }
 
-  return CHOICES[choice](users);
+  return CHOICES[choice](accounts);
 };
 
-main(formatUsersData([]));
+const loadAccountHolders = (account, accounts) => {
+  const userInfo = account.split(",");
+  accounts.push({
+    name: userInfo[0],
+    phone: userInfo[1],
+    balance: parseInt(userInfo[2]),
+    pass: userInfo[3],
+    pin: userInfo[4],
+    history: userInfo.slice(5),
+  });
+};
+
+const fetchUsersData = (accounts) => {
+  Deno.readTextFileSync("./data.csv")
+    .split("\n")
+    .forEach((account) => {
+      loadAccountHolders(account, accounts);
+    });
+
+  return accounts;
+};
+
+main(fetchUsersData([]));
