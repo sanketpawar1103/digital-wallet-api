@@ -151,19 +151,29 @@ export const isInValidUser = (user, accounts) => {
   if (!isValidName(user.name)) {
     console.log(" ❌ Invalid name (letters & spaces only, min 3 chars)\n");
     return true;
-  } else if (!isValidPhone(user.phone)) {
+  }
+
+  if (!isValidPhone(user.phone)) {
     console.log(" ❌ Invalid phone number\n");
     return true;
-  } else if (!isValidPassword(user.pass)) {
+  }
+
+  if (!isValidPassword(user.pass)) {
     console.log(" ❌ Password must be at least 4 characters\n");
     return true;
-  } else if (!isValidPin(user.pin)) {
+  }
+
+  if (!isValidPin(user.pin)) {
     console.log(" ❌ Pin must be exactly 4 digits\n");
     return true;
-  } else if (!isValidBalance(user.balance)) {
+  }
+
+  if (!isValidBalance(user.balance)) {
     console.log(" ❌ Invalid balance amount\n");
     return true;
-  } else if (doesExist(user, accounts)) {
+  }
+
+  if (doesExist(user, accounts)) {
     console.log(" ❌ User already exists\n");
     return true;
   }
@@ -224,8 +234,8 @@ const createAccount = (accounts) => {
 
 const exitHome = (accounts) =>
   Deno.writeTextFileSync(
-    "./data.csv",
-    accounts.map((each) => Object.values(each).join(",")).join("\n"),
+    "./accounts.json",
+    JSON.stringify(accounts, null, 2),
   );
 
 const appActions = {
@@ -246,26 +256,13 @@ const main = (accounts) => {
   return appActions[choice](accounts);
 };
 
-const loadAccountHolders = (account, accounts) => {
-  const userInfo = account.split(",");
-  accounts.push({
-    name: userInfo[0],
-    phone: userInfo[1],
-    balance: parseInt(userInfo[2]),
-    pass: userInfo[3],
-    pin: userInfo[4],
-    history: userInfo.slice(5),
-  });
+const fetchAllAccounts = () => {
+  try {
+    const content = Deno.readTextFileSync("./accounts.json");
+    return JSON.parse(content);
+  } catch {
+    return [];
+  }
 };
 
-const fetchUsersData = (accounts) => {
-  Deno.readTextFileSync("./src/data.csv")
-    .split("\n")
-    .forEach((account) => {
-      loadAccountHolders(account, accounts);
-    });
-
-  return accounts;
-};
-
-// main(fetchUsersData([]));
+main(fetchAllAccounts());

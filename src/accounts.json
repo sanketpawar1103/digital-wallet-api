@@ -1,0 +1,18 @@
+[
+  {
+    "name": "Sanket Pawar",
+    "phone": "8208878187",
+    "balance": 1000,
+    "pass": "1234",
+    "pin": "1234",
+    "history": []
+  },
+  {
+    "name": "Satish Pawar",
+    "phone": "9850908332",
+    "balance": 2000,
+    "pass": "4912",
+    "pin": "4912",
+    "history": []
+  }
+]
