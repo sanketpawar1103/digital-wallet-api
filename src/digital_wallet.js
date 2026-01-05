@@ -127,25 +127,44 @@ const grauntAccess = (user, accounts) => {
   return ACTIONS[choice](user, accounts);
 };
 
-const isInValidUser = (user, accounts) => {
+const REGEX = {
+  NAME: /^[A-Za-z ]{3,50}$/,
+  PHONE: /^[6-9]\d{9}$/,
+  PASSWORD: /^.{4,}$/,
+  PIN: /^\d{4}$/,
+};
+
+export const isValidName = (name) => REGEX.NAME.test(name.trim());
+
+export const isValidPhone = (phone) => REGEX.PHONE.test(phone);
+
+export const isValidPassword = (pass) => REGEX.PASSWORD.test(pass);
+
+export const isValidPin = (pin) => REGEX.PIN.test(pin);
+
+export const isValidBalance = (balance) =>
+  Number.isInteger(balance) && balance >= 0;
+
+export const isInValidUser = (user, accounts) => {
   console.clear();
-  if (!user.name || user.name.includes(",")) {
-    console.log(" ❌ Empty name or remove ,\n");
+
+  if (!isValidName(user.name)) {
+    console.log(" ❌ Invalid name (letters & spaces only, min 3 chars)\n");
     return true;
-  } else if (user.phone.length !== 10 || user.phone.includes(",")) {
-    console.log(" ❌ Phone number should be of 10 digits Or remove ,\n");
+  } else if (!isValidPhone(user.phone)) {
+    console.log(" ❌ Invalid phone number\n");
     return true;
-  } else if (user.pass.length < 4 || user.pass.includes(",")) {
-    console.log(" ❌ Password should be atleast of 4 charachters remove ,\n");
+  } else if (!isValidPassword(user.pass)) {
+    console.log(" ❌ Password must be at least 4 characters\n");
     return true;
-  } else if (user.pin.length !== 4 || user.pin.includes(",")) {
-    console.log(" ❌ Pin should be of 4 chars only remove ,\n");
+  } else if (!isValidPin(user.pin)) {
+    console.log(" ❌ Pin must be exactly 4 digits\n");
     return true;
-  } else if (Number.isNaN(user.balance) || user.balance < 0) {
-    console.log(" ❌ Invalid balance amount, \n");
+  } else if (!isValidBalance(user.balance)) {
+    console.log(" ❌ Invalid balance amount\n");
     return true;
   } else if (doesExist(user, accounts)) {
-    console.log(" ❌ User already exists, \n");
+    console.log(" ❌ User already exists\n");
     return true;
   }
 
@@ -209,7 +228,7 @@ const exitHome = (accounts) =>
     accounts.map((each) => Object.values(each).join(",")).join("\n"),
   );
 
-const CHOICES = {
+const appActions = {
   1: createAccount,
   2: logIn,
   3: exitHome,
@@ -218,13 +237,13 @@ const CHOICES = {
 const main = (accounts) => {
   const choice = prompt(" 1. Create Account\n 2. Log In\n 3. Exit\n\n");
 
-  if (!(choice in CHOICES)) {
+  if (!(choice in appActions)) {
     console.clear();
     console.log(" ❌ Invalid CHOICE\n");
     return main(accounts);
   }
 
-  return CHOICES[choice](accounts);
+  return appActions[choice](accounts);
 };
 
 const loadAccountHolders = (account, accounts) => {
@@ -240,7 +259,7 @@ const loadAccountHolders = (account, accounts) => {
 };
 
 const fetchUsersData = (accounts) => {
-  Deno.readTextFileSync("./data.csv")
+  Deno.readTextFileSync("./src/data.csv")
     .split("\n")
     .forEach((account) => {
       loadAccountHolders(account, accounts);
@@ -249,4 +268,4 @@ const fetchUsersData = (accounts) => {
   return accounts;
 };
 
-main(fetchUsersData([]));
+// main(fetchUsersData([]));
