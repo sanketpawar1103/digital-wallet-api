@@ -2,10 +2,13 @@
   {
     "name": "Sanket Pawar",
     "phone": "8208878187",
-    "balance": 1000,
+    "balance": 11009,
     "pass": "1234",
     "pin": "1234",
-    "history": []
+    "history": [
+      "5/1/2026, 4:03:05 pm\tFrom : Archana Pawar\tAmount : 10",
+      "5/1/2026, 4:07:32 pm\tFrom : himanshu jaguri\tAmount : 9999"
+    ]
   },
   {
     "name": "Satish Pawar",
@@ -14,5 +17,25 @@
     "pass": "4912",
     "pin": "4912",
     "history": []
+  },
+  {
+    "name": "Archana Pawar",
+    "phone": "8999005195",
+    "balance": 990,
+    "pass": "1234",
+    "pin": "1234",
+    "history": [
+      "5/1/2026, 4:03:05 pm\tTo : Sanket Pawar\tAmount : 10"
+    ]
+  },
+  {
+    "name": "himanshu jaguri",
+    "phone": "9111111111",
+    "balance": 999999999999,
+    "pass": "himanshu@123",
+    "pin": "2004",
+    "history": [
+      "5/1/2026, 4:07:32 pm\tTo : Sanket Pawar\tAmount : 9999"
+    ]
   }
 ]
