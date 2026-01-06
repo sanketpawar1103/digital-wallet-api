@@ -1,7 +1,9 @@
 import { promptSecret } from "@std/cli";
-
-const userExistsByPhone = (user, accounts) =>
-  accounts.some((each) => each.phone === user.phone);
+import {
+  isUserInvalid,
+  isValidTransactionAmount,
+  userExistsByPhone,
+} from "./validation.js";
 
 const applyTransaction = (to, from, info) => {
   to.history.push(
@@ -47,7 +49,7 @@ const areTransactionDetailsValid = (user, accounts, details) => {
   if (!receiver || receiver.phone === user.phone) {
     console.log(" ❌ Receiver not present\n");
     return false;
-  } else if (details.amount < 0 || Number.isNaN(details.amount)) {
+  } else if (!isValidTransactionAmount(details.amount)) {
     console.log(` ❌ Invalid amount value\n`);
     return false;
   } else if (user.balance < details.amount) {
@@ -87,15 +89,20 @@ const viewTransactionHistory = (user, accounts) => {
 
 const addBalance = (user, accounts) => {
   console.log(` ${user.name}\n`);
-  const pin = promptSecret("Enter pin :");
   const amount = parseInt(prompt("Enter amount :"));
+  const pin = promptSecret("Enter pin :");
   console.clear();
 
-  if (pin !== user.pin || Number.isNaN(amount) || amount < 0) {
+  if (pin !== user.pin || !isValidTransactionAmount(amount)) {
     console.log(` ❌ Invalid pin or amount value ${user.name}`);
     return grantAccess(user, accounts);
   }
 
+  user.history.push(
+    `${new Date().toLocaleString()}\t${
+      "Amount Added".padEnd(30)
+    } Amount : ${amount}`,
+  );
   console.log(` ✅ Balance added successfully ${user.name}`);
   user.balance += amount;
   return grantAccess(user, accounts);
@@ -110,14 +117,14 @@ const logoutAccount = (_user, accounts) => {
 const userMenuActions = {
   1: checkBalance,
   2: sendMoney,
-  3: viewTransactionHistory,
-  4: addBalance,
+  3: addBalance,
+  4: viewTransactionHistory,
   5: logoutAccount,
 };
 
 const grantAccess = (user, accounts) => {
-  let msg = `\n 1. Check balance\n 2. Send money\n `;
-  msg += `3. Get statements\n 4. Add balance\n 5. Exit page\n\n`;
+  let msg = `\n 1. Check Balance\n 2. Send Money\n `;
+  msg += `3. Add Balance\n 4. View Transaction History\n 5. Logout\n\n`;
   const choice = prompt(msg);
   console.clear();
 
@@ -127,60 +134,6 @@ const grantAccess = (user, accounts) => {
   }
 
   return userMenuActions[choice](user, accounts);
-};
-
-const REGEX = {
-  NAME: /^[A-Za-z ]{3,50}$/,
-  PHONE: /^[6-9]\d{9}$/,
-  PASSWORD: /^.{4,}$/,
-  PIN: /^\d{4}$/,
-};
-
-export const isValidName = (name) => REGEX.NAME.test(name.trim());
-
-export const isValidPhone = (phone) => REGEX.PHONE.test(phone);
-
-export const isValidPassword = (pass) => REGEX.PASSWORD.test(pass);
-
-export const isValidPin = (pin) => REGEX.PIN.test(pin);
-
-export const isValidBalance = (balance) =>
-  Number.isInteger(balance) && balance >= 0;
-
-export const isInValidUser = (user, accounts) => {
-  console.clear();
-
-  if (!isValidName(user.name)) {
-    console.log(" ❌ Invalid name (letters & spaces only, min 3 chars)\n");
-    return true;
-  }
-
-  if (!isValidPhone(user.phone)) {
-    console.log(" ❌ Invalid phone number\n");
-    return true;
-  }
-
-  if (!isValidPassword(user.pass)) {
-    console.log(" ❌ Password must be at least 4 characters\n");
-    return true;
-  }
-
-  if (!isValidPin(user.pin)) {
-    console.log(" ❌ Pin must be exactly 4 digits\n");
-    return true;
-  }
-
-  if (!isValidBalance(user.balance)) {
-    console.log(" ❌ Invalid balance amount\n");
-    return true;
-  }
-
-  if (userExistsByPhone(user, accounts)) {
-    console.log(" ❌ User already exists\n");
-    return true;
-  }
-
-  return false;
 };
 
 const readUserDetails = () => {
@@ -224,7 +177,7 @@ const loginUser = (accounts) => {
 
 const createAccount = (accounts) => {
   const user = readUserDetails();
-  if (isInValidUser(user, accounts)) {
+  if (isUserInvalid(user, accounts, userExistsByPhone)) {
     return main(accounts);
   }
 

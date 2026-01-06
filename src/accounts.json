@@ -2,12 +2,15 @@
   {
     "name": "Sanket Pawar",
     "phone": "8208878187",
-    "balance": 11009,
+    "balance": 23009,
     "pass": "1234",
     "pin": "1234",
     "history": [
       "5/1/2026, 4:03:05 pm\tFrom : Archana Pawar\tAmount : 10",
-      "5/1/2026, 4:07:32 pm\tFrom : himanshu jaguri\tAmount : 9999"
+      "5/1/2026, 4:07:32 pm\tFrom : himanshu jaguri\tAmount : 9999",
+      "5/1/2026, 4:14:48 pm\tFrom : Aniruddha haldar\tAmount : 10000",
+      "5/1/2026, 4:20:51 pm\tAmount Added \tAmount : 1000",
+      "5/1/2026, 4:59:45 pm\tAmount Added                   Amount : 1000"
     ]
   },
   {
@@ -37,5 +40,23 @@
     "history": [
       "5/1/2026, 4:07:32 pm\tTo : Sanket Pawar\tAmount : 9999"
     ]
+  },
+  {
+    "name": "Aniruddha haldar",
+    "phone": "7439109283",
+    "balance": 9990000,
+    "pass": "Aniruddha",
+    "pin": "1609",
+    "history": [
+      "5/1/2026, 4:14:48 pm\tTo : Sanket Pawar\tAmount : 10000"
+    ]
+  },
+  {
+    "name": "Nitesh Chaurasiya",
+    "phone": "9569304176",
+    "balance": 1000,
+    "pass": "password",
+    "pin": "0000",
+    "history": []
   }
 ]

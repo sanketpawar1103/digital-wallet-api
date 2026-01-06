@@ -4,7 +4,7 @@ import {
   isValidPassword,
   isValidPhone,
   isValidPin,
-} from "../src/digital_wallet.js";
+} from "../src/validation.js";
 
 Deno.test("Checks for the user name validity", () => {
   assertEquals(isValidName("Snaket Pawar"), true);
