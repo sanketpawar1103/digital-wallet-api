@@ -58,5 +58,13 @@
     "pass": "password",
     "pin": "0000",
     "history": []
+  },
+  {
+    "name": "Pradipta Dey",
+    "phone": "9876543210",
+    "balance": 1234,
+    "pass": "1234",
+    "pin": "1234",
+    "history": []
   }
 ]

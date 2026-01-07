@@ -5,6 +5,24 @@ import {
   userExistsByPhone,
 } from "./validation.js";
 
+const persistAccounts = (accounts) =>
+  Deno.writeTextFileSync(
+    "./src/accounts.json",
+    JSON.stringify(accounts, null, 2),
+  );
+
+const setUpSignalHandlers = (accounts) => {
+  const interruption = (signal) => {
+    console.clear();
+    console.log(`\n⚠️  Received ${signal}. Saving data...`);
+    persistAccounts(accounts);
+    console.log("✅ Accounts saved. Exiting safely.");
+  };
+
+  Deno.addSignalListener("SIGINT", () => interruption("SIGINT"));
+  Deno.addSignalListener("SIGTERM", () => interruption("SIGTERM"));
+};
+
 const applyTransaction = (to, from, info) => {
   to.history.push(
     `${
@@ -65,10 +83,10 @@ const areTransactionDetailsValid = (user, accounts, details) => {
 };
 
 const sendMoney = (user, accounts) => {
-  if (
-    areTransactionDetailsValid(user, accounts, readTransactionDetails(user))
-  ) {
+  const transactiondetails = readTransactionDetails(user);
+  if (areTransactionDetailsValid(user, accounts, transactiondetails)) {
     console.log(` ✅ Transaction Successful ${user.name}\n`);
+    persistAccounts(accounts);
   }
 
   return grantAccess(user, accounts);
@@ -87,6 +105,18 @@ const viewTransactionHistory = (user, accounts) => {
   return grantAccess(user, accounts);
 };
 
+const recordTransaction = (user, amount) =>
+  user.history.push(
+    `${new Date().toLocaleString()}\t${
+      "Amount Added".padEnd(30)
+    } Amount : ${amount}`,
+  );
+
+const depositeAmount = (user, amount, accounts) => {
+  user.balance += amount;
+  persistAccounts(accounts);
+};
+
 const addBalance = (user, accounts) => {
   console.log(` ${user.name}\n`);
   const amount = parseInt(prompt("Enter amount :"));
@@ -98,13 +128,10 @@ const addBalance = (user, accounts) => {
     return grantAccess(user, accounts);
   }
 
-  user.history.push(
-    `${new Date().toLocaleString()}\t${
-      "Amount Added".padEnd(30)
-    } Amount : ${amount}`,
-  );
+  recordTransaction(user, amount);
   console.log(` ✅ Balance added successfully ${user.name}`);
-  user.balance += amount;
+  depositeAmount(user, amount, accounts);
+
   return grantAccess(user, accounts);
 };
 
@@ -157,21 +184,21 @@ const readCredentials = () => {
   return { phone, pass };
 };
 
-const authenticateUser = (credentials, accounts) =>
-  accounts.find((each) =>
-    each.phone === credentials.phone && each.pass === credentials.pass
-  );
+const findUserByPhone = (credentialsPhone, accounts) =>
+  accounts.find((each) => each.phone === credentialsPhone);
 
 const loginUser = (accounts) => {
-  const user = authenticateUser(readCredentials(), accounts);
+  const credentials = readCredentials();
+  const user = findUserByPhone(credentials.phone, accounts);
   console.clear();
 
-  if (!user) {
+  if (!user || user.pass !== credentials.pass) {
     console.log(" ❌ Credentials mismatch\n");
     return main(accounts);
   }
 
   console.log(`\tWelcome ${user.name}`);
+
   return grantAccess(user, accounts);
 };
 
@@ -183,20 +210,15 @@ const createAccount = (accounts) => {
 
   console.log(" ✅ Account created successfully\n");
   accounts.push(user);
+  persistAccounts(accounts);
 
   return main(accounts);
 };
 
-const saveAndExit = (accounts) =>
-  Deno.writeTextFileSync(
-    "./accounts.json",
-    JSON.stringify(accounts, null, 2),
-  );
-
 const homeMenuActions = {
   1: createAccount,
   2: loginUser,
-  3: saveAndExit,
+  3: persistAccounts,
 };
 
 const main = (accounts) => {
@@ -215,11 +237,14 @@ const main = (accounts) => {
 
 const fetchAllAccounts = () => {
   try {
-    const content = Deno.readTextFileSync("./accounts.json");
+    const content = Deno.readTextFileSync("./src/accounts.json");
+
     return JSON.parse(content);
   } catch {
     return [];
   }
 };
 
-main(fetchAllAccounts());
+const accounts = fetchAllAccounts();
+setUpSignalHandlers(accounts);
+main(accounts);
