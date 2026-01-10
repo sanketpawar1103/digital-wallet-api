@@ -17,6 +17,7 @@ const setUpSignalHandlers = (accounts) => {
     console.log(`\n⚠️  Received ${signal}. Saving data...`);
     persistAccounts(accounts);
     console.log("✅ Accounts saved. Exiting safely.");
+    Deno.exit(0);
   };
 
   Deno.addSignalListener("SIGINT", () => interruption("SIGINT"));
@@ -194,25 +195,22 @@ const loginUser = (accounts) => {
 
   if (!user || user.pass !== credentials.pass) {
     console.log(" ❌ Credentials mismatch\n");
-    return main(accounts);
+    return;
   }
 
   console.log(`\tWelcome ${user.name}`);
-
-  return grantAccess(user, accounts);
+  grantAccess(user, accounts);
 };
 
 const createAccount = (accounts) => {
   const user = readUserDetails();
   if (isUserInvalid(user, accounts, userExistsByPhone)) {
-    return main(accounts);
+    return;
   }
 
   console.log(" ✅ Account created successfully\n");
   accounts.push(user);
   persistAccounts(accounts);
-
-  return main(accounts);
 };
 
 const homeMenuActions = {
@@ -222,17 +220,20 @@ const homeMenuActions = {
 };
 
 const main = (accounts) => {
-  const choice = prompt(
-    " 1. Create Account\n 2. Log In\n 3. Close application\n\n",
-  );
-
-  if (!(choice in homeMenuActions)) {
+  while (true) {
     console.clear();
-    console.log(" ❌ Invalid choice\n");
-    return main(accounts);
-  }
+    const msg = ` 1. Create Account\n 2. Log In\n 3. Close Application\n\n`;
+    const choice = prompt(msg);
 
-  return homeMenuActions[choice](accounts);
+    if (!(choice in homeMenuActions) || choice === null) {
+      console.clear();
+      console.log(" ❌ Invalid choice\n");
+      continue;
+    }
+
+    homeMenuActions[choice](accounts);
+    if (choice === "3") return;
+  }
 };
 
 const fetchAllAccounts = () => {
