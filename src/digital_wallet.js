@@ -7,7 +7,7 @@ import {
 
 const persistAccounts = (accounts) =>
   Deno.writeTextFileSync(
-    "./src/accounts.json",
+    "./database/accounts.json",
     JSON.stringify(accounts, null, 2),
   );
 
@@ -39,7 +39,7 @@ const applyTransaction = (to, from, info) => {
   from.balance -= info.amount;
 };
 
-const checkBalance = (user, accounts) => {
+const checkBalance = (user) => {
   console.log(` ${user.name}\n`);
   const pin = promptSecret(" Enter your pin number :");
   console.clear();
@@ -48,8 +48,6 @@ const checkBalance = (user, accounts) => {
     ? ` ✅ User : ${user.name}\n Account Balance = ${user.balance}\n`
     : ` ❌ Invalid Pin ${user.name}\n`;
   console.log(msg);
-
-  return grantAccess(user, accounts);
 };
 
 const readTransactionDetails = (user) => {
@@ -89,11 +87,9 @@ const sendMoney = (user, accounts) => {
     console.log(` ✅ Transaction Successful ${user.name}\n`);
     persistAccounts(accounts);
   }
-
-  return grantAccess(user, accounts);
 };
 
-const viewTransactionHistory = (user, accounts) => {
+const viewTransactionHistory = (user) => {
   console.log(` ${user.name}\n`);
   const pin = promptSecret("Enter your pin :");
   console.clear();
@@ -102,8 +98,6 @@ const viewTransactionHistory = (user, accounts) => {
     ? ` ${user.name}'s Statements\n${user.history.join("\n")}\n`
     : ` ❌ Invalid pin ${user.name}`;
   console.log(msg);
-
-  return grantAccess(user, accounts);
 };
 
 const recordTransaction = (user, amount) =>
@@ -126,20 +120,12 @@ const addBalance = (user, accounts) => {
 
   if (pin !== user.pin || !isValidTransactionAmount(amount)) {
     console.log(` ❌ Invalid pin or amount value ${user.name}`);
-    return grantAccess(user, accounts);
+    return;
   }
 
   recordTransaction(user, amount);
   console.log(` ✅ Balance added successfully ${user.name}`);
   depositeAmount(user, amount, accounts);
-
-  return grantAccess(user, accounts);
-};
-
-const logoutAccount = (_user, accounts) => {
-  console.clear();
-
-  return main(accounts);
 };
 
 const userMenuActions = {
@@ -147,21 +133,29 @@ const userMenuActions = {
   2: sendMoney,
   3: addBalance,
   4: viewTransactionHistory,
-  5: logoutAccount,
 };
 
 const grantAccess = (user, accounts) => {
-  let msg = `\n 1. Check Balance\n 2. Send Money\n `;
-  msg += `3. Add Balance\n 4. View Transaction History\n 5. Logout\n\n`;
-  const choice = prompt(msg);
   console.clear();
+  while (true) {
+    console.log(`\tWelcome ${user.name}`);
 
-  if (!(choice in userMenuActions)) {
-    console.log(` ❌ Invalid choice ${user.name}`);
-    return grantAccess(user, accounts);
+    let msg = `\n 1. Check Balance\n 2. Send Money\n `;
+    msg += `3. Add Balance\n 4. View Transaction History\n 5. Logout\n\n`;
+
+    const choice = prompt(msg);
+    console.clear();
+
+    if (choice === "5") return;
+
+    if (!(choice in userMenuActions)) {
+      console.log(` ❌ Invalid choice ${user.name}`);
+      continue;
+    }
+
+    const action = userMenuActions[choice];
+    action(user, accounts);
   }
-
-  return userMenuActions[choice](user, accounts);
 };
 
 const readUserDetails = () => {
@@ -191,14 +185,13 @@ const findUserByPhone = (credentialsPhone, accounts) =>
 const loginUser = (accounts) => {
   const credentials = readCredentials();
   const user = findUserByPhone(credentials.phone, accounts);
-  console.clear();
 
   if (!user || user.pass !== credentials.pass) {
+    console.clear();
     console.log(" ❌ Credentials mismatch\n");
     return;
   }
 
-  console.log(`\tWelcome ${user.name}`);
   grantAccess(user, accounts);
 };
 
@@ -221,7 +214,6 @@ const homeMenuActions = {
 
 const main = (accounts) => {
   while (true) {
-    console.clear();
     const msg = ` 1. Create Account\n 2. Log In\n 3. Close Application\n\n`;
     const choice = prompt(msg);
 
@@ -238,7 +230,7 @@ const main = (accounts) => {
 
 const fetchAllAccounts = () => {
   try {
-    const content = Deno.readTextFileSync("./src/accounts.json");
+    const content = Deno.readTextFileSync("./database/accounts.json");
 
     return JSON.parse(content);
   } catch {
@@ -248,4 +240,5 @@ const fetchAllAccounts = () => {
 
 const accounts = fetchAllAccounts();
 setUpSignalHandlers(accounts);
+console.clear();
 main(accounts);
