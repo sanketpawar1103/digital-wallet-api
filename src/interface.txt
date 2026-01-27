@@ -1,180 +1,214 @@
 - Home page preview:
 
 ========================================
-      🏦 DIGITAL WALLET API 🏦
+        🏦 DIGITAL WALLET 🏦
 ========================================
-1️⃣  Create Account
-2️⃣  Log In
-3️⃣  Close Application
 
-👉  Enter Your Choise : ___
+👉 Select an option to continue
 
-----------------------------------------
-Note* : On valid choise redirect to that page, otherwise display screen 1.
+📝  Create New Account  
+🔑  Log In  
+❌  Exit Application  
 
-- Screen 1:
-❌  Inalid Choice 
+========================================
 
-🔄 Press Enter To Retry
+
+Note* : Redirect to that page, after selection.
+
 
 XXXXXXXXXXXX----END-OF-THE-PAGE-----XXXXXXXXXXXX
 
 - Create Account Page
 
 ========================================
-        🧾 Create Account 🧾
+        🧾 Create Account
 ========================================
-👤  User Name       : Sanket Pawar
-📲  Phone Number    : 8208XXXXXX
-💰  Initial Balance : 1000
-🔓  Password        : *****
-🔑  UPI PIN         : ****
 
-----------------------------------------
-Note* : On create account successful, display screen 2 otherwise screen 3.
+👉 Fill in the details to create your account
 
-- Screen 2:
-✅  Account Created Successfully !
+👤  Full Name         : Sanket Pawar  
+📲  Phone Number      : 8208XXXXXX  
+💰  Initial Balance   : 1000  
+🔓  Password          : *****  
+🔑  UPI PIN (4-digit) : ****  
 
-⏪ Press Enter To Return To Home
+========================================
 
-- Screen 3:
-❌  Invalid Credential Entry (Credential Emoji and Desc)
+Note* : On create account successful redirect to login, otherwise display screen 1.
+- Screen 1:
+❌ Account Creation Failed  
+⚠️ User already exists with this phone number
 
-⏪ Press Enter To Return To Home
+⏪ Press Enter to go back
+
 
 XXXXXXXXXXXX----END-OF-THE-PAGE-----XXXXXXXXXXXX
 
 - Log In Page 
 
 ========================================
-            🔐 LOG IN 🔐
+            🔐 Log In
 ========================================
-📲  Phone Number    : 8208XXXXXX
-🔓  Password        : *****
+
+👉 Enter your credentials to continue
+
+📲  Phone Number : 8208XXXXXX  
+🔓  Password     : *****  
+
+========================================
 
 ----------------------------------------
 
-Note* : On login successful, redirect to user menu otherwise display Screen 4
+Note* : On login successful, redirect to user menu otherwise display Screen 2.
 
-- Screen 4:
-❌  User not found 
+- Screen 2:
+❌ Login Failed  
+⚠️ User not found or incorrect credentials
 
-⏪ Press Enter To Return To Home
+⏪ Press Enter to go back
+
 
 XXXXXXXXXXXX----END-OF-THE-PAGE-----XXXXXXXXXXXX
 
 - User Page
 
 ========================================
-      👋 Welcome Sanket Pawar
+👋 Welcome, Sanket Pawar 👤
 ========================================
-1️⃣  Check Balance
-2️⃣  Send Money
-3️⃣  Add Balance
-4️⃣  View Transaction History
-5️⃣  Log Out
 
-👉  Wnter Your Choise : ___
+👉 Choose an option
+
+💰  Check Balance  
+💸  Send Money 
+➕💰  Add Balance  
+📊  Transaction History  
+🚪  Log Out  
+
+========================================
 
 ----------------------------------------
-Note* : On valid choise redirect to that page, otherwise screen 5.
+Note* : Redirect to that page, after selection.
 
-- Screen 5:
-❌  Inalid Choice 
-
-🔄 Press Enter To Retry
 
 XXXXXXXXXXXX----END-OF-THE-PAGE-----XXXXXXXXXXXX
 
 - Check Balance
 
 ========================================
-💰 Check Balance --|-- 👤 Sanket Pawar
+💰 Check Balance
+👤 User : Sanket Pawar
 ========================================
-🔑  UPI PIN         : ****
+
+👉 Enter your UPI PIN to view balance
+
+🔑  UPI PIN : ****  
+
+========================================
+
 
 ----------------------------------------
 
-Note* : On PIN match, display Screen 6 otherwise display Screen 7
+Note* : On PIN match, display Screen 3 otherwise display Screen 4
 
-- Screen 6:
-🤑  Account Balance : 1000
+- Screen 3:
+🤑 Available Balance : ₹1000
 
-⏪ Press Enter To Return To User Menu
+⏪ Go Back
 
-- Screen 7:
-❌  PIN Miss-match
+- Screen 4:
+❌ Incorrect UPI PIN
 
-⏪ Press Enter To Return To User Menu
+⏪ Go Back
 
 XXXXXXXXXXXX----END-OF-THE-PAGE-----XXXXXXXXXXXX
 
 - Send Money
 
 ========================================
-💸 Send Money --|-- 👤 Sanket Pawar
+💸 Send Money
+👤 User : Sanket Pawar
 ========================================
-📲  Receiver's Phone Number : 8208XXXXXX
-💰  Transaction Amount      : 1000
-🔑  User's UPI PIN          : ****
+
+👉 Enter receiver details and confirm
+
+📲  Receiver Phone Number : 8208XXXXXX  
+💰  Amount to Send        : 1000  
+🔑  UPI PIN               : ****  
+
+========================================
 
 ----------------------------------------
 
-Note* : On valid inputs, display Screen 8 otherwise display Screen 9
+Note* : On valid inputs, display Screen 5 otherwise display Screen 6
 
-- Screen 8:
-✅  Transaction successful !
+- Screen 5:
+✅ Transaction Successful 🎉  
+💸 Amount Sent : ₹1000
 
-⏪  Press Enter To Return To User Menu
+⏪ Go Back
 
-- Screen 9:
-❌  Transaction Failed !
 
-⏪  Press Enter To Return To User Menu
+- Screen 6:
+❌ Transaction Failed  
+⚠️ Invalid details or insufficient balance
+
+⏪ Press Enter to retry
 
 XXXXXXXXXXXX----END-OF-THE-PAGE-----XXXXXXXXXXXX
 
 - Add Balance
 
 ========================================
-💰 Add Balance --|-- 👤 Sanket Pawar
+➕💰 Add Balance
+👤 User : Sanket Pawar
 ========================================
-🔑  UPI PIN      : ****
-💰  Amount       : 1000
 
-----------------------------------------
+👉 Enter amount and confirm with UPI PIN
 
-Note* : On PIN match and valid amount, display Screen 10 otherwise display Screen 11
+🔑  UPI PIN : ****  
+💰  Amount  : ₹1000  
 
-- Screen 10:
-✅  Balance Added Successfully !
+========================================
 
-🤑  Available Balance : 2000
 
-⏪ Press Enter To Return To User Menu
+Note* : On PIN match and valid amount, display Screen 7 otherwise display Screen 8
 
-- Screen 11:
-❌  Invalid Credential - Transaction Failed !
+- Screen 7:
+🎉 Balance Added Successfully!
 
-⏪ Press Enter To Return To User Menu
+🤑 Updated Balance : ₹2000
+
+⏪ Go Back
+
+
+⏪ Go Back
+
+- Screen 8:
+❌ Balance Addition Failed  
+⚠️ Invalid PIN or amount
+
+⏪ Go Back
 
 XXXXXXXXXXXX----END-OF-THE-PAGE-----XXXXXXXXXXXX
 
 - View Transaction History
 
 ========================================
-💰 view History --|-- 👤 Sanket Pawar
+📊 Transaction History
+👤 User : Sanket Pawar
 ========================================
-🔑  UPI PIN      : ****
 
-----------------------------------------
+👉 Enter UPI PIN to view transaction history
 
-Note* : On PIN match, display Screen 12 otherwise display Screen 13
+🔑  UPI PIN : ****  
 
-- Screen 12:
+========================================
 
-📊  Account Statements:
+Note* : On PIN match, display Screen 9 otherwise display Screen 10
+
+- Screen 9:
+
+📜  Account Statements:
 |------------------------------------------------------------------------|
 | Time and Date            |  Transaction Description    |   Amount      |
 |------------------------------------------------------------------------|
@@ -185,11 +219,11 @@ Note* : On PIN match, display Screen 12 otherwise display Screen 13
 | 11/01/2026, 10:32:59 am  |  Add Balance                |  + 1000       |
 |------------------------------------------------------------------------|
 
-⏪ Press Enter To Return To User Menu
+⏪ Go Back
 
 - Screen 13:
-❌  Invalid UPI PIN !
+❌ Invalid UPI PIN  
 
-⏪ Press Enter To Return To User Menu
+⏪ Go Back
 
 XXXXXXXXXXXX----END-OF-THE-PAGE-----XXXXXXXXXXXX

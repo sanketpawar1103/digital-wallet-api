@@ -11,19 +11,6 @@ const persistAccounts = (accounts) =>
     JSON.stringify(accounts, null, 2),
   );
 
-const setUpSignalHandlers = (accounts) => {
-  const interruption = (signal) => {
-    console.clear();
-    console.log(`\n⚠️  Received ${signal}. Saving data...`);
-    persistAccounts(accounts);
-    console.log("✅ Accounts saved. Exiting safely.");
-    Deno.exit(0);
-  };
-
-  Deno.addSignalListener("SIGINT", () => interruption("SIGINT"));
-  Deno.addSignalListener("SIGTERM", () => interruption("SIGTERM"));
-};
-
 const applyTransaction = (to, from, info) => {
   to.history.push(
     `${
@@ -212,7 +199,7 @@ const homeMenuActions = {
   3: persistAccounts,
 };
 
-const main = (accounts) => {
+export const walletService = (accounts) => {
   while (true) {
     const msg = ` 1. Create Account\n 2. Log In\n 3. Close Application\n\n`;
     const choice = prompt(msg);
@@ -227,18 +214,3 @@ const main = (accounts) => {
     if (choice === "3") return;
   }
 };
-
-const fetchAllAccounts = () => {
-  try {
-    const content = Deno.readTextFileSync("./database/accounts.json");
-
-    return JSON.parse(content);
-  } catch {
-    return [];
-  }
-};
-
-const accounts = fetchAllAccounts();
-setUpSignalHandlers(accounts);
-console.clear();
-main(accounts);
