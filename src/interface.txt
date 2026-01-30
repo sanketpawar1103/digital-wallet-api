@@ -73,7 +73,8 @@ XXXXXXXXXXXX----END-OF-THE-PAGE-----XXXXXXXXXXXX
 - User Page
 
 ========================================
-👋 Welcome, Sanket Pawar 👤
+👋 Welcome...
+👤 Sanket Pawar
 ========================================
 
 👉 Choose an option
@@ -221,7 +222,7 @@ Note* : On PIN match, display Screen 9 otherwise display Screen 10
 
 ⏪ Go Back
 
-- Screen 13:
+- Screen 10:
 ❌ Invalid UPI PIN  
 
 ⏪ Go Back

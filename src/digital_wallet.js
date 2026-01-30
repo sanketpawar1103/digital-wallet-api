@@ -12,15 +12,19 @@ const persistAccounts = (accounts) =>
   );
 
 const applyTransaction = (to, from, info) => {
-  to.history.push(
-    `${
-      new Date().toLocaleString()
-    }\tFrom : ${from.name}\tAmount : ${info.amount}`,
-  );
+  const date = new Date().toLocaleString();
+  const Amount = info.amount;
+  to.history.push({
+    Date: date,
+    Description: `Received From: ${from.name}`,
+    Amount,
+  });
 
-  from.history.push(
-    `${new Date().toLocaleString()}\tTo : ${to.name}\tAmount : ${info.amount}`,
-  );
+  from.history.push({
+    Date: date,
+    Description: `Paid To: ${to.name}`,
+    Amount: -Amount,
+  });
 
   to.balance += info.amount;
   from.balance -= info.amount;
@@ -38,10 +42,10 @@ const checkBalance = (user) => {
 };
 
 const readTransactionDetails = (user) => {
-  console.log(` ${user.name}\n`);
-  const phone = prompt(" Enter receiver's phone number :");
-  const amount = parseInt(prompt("Enter amount :"));
-  const pin = promptSecret("Enter transaction pin :");
+  console.log(`User: ${user.name}\n`);
+  const phone = prompt("Enter receiver's phone number :");
+  const amount = parseInt(prompt(" Enter amount :"));
+  const pin = promptSecret(" Enter transaction pin :");
   console.clear();
 
   return { phone, amount, pin };
@@ -69,9 +73,9 @@ const areTransactionDetailsValid = (user, accounts, details) => {
 };
 
 const sendMoney = (user, accounts) => {
-  const transactiondetails = readTransactionDetails(user);
-  if (areTransactionDetailsValid(user, accounts, transactiondetails)) {
-    console.log(` ✅ Transaction Successful ${user.name}\n`);
+  const transactionDetails = readTransactionDetails(user);
+  if (areTransactionDetailsValid(user, accounts, transactionDetails)) {
+    console.log(` ✅ Transaction Successful\n`);
     persistAccounts(accounts);
   }
 };
@@ -81,20 +85,26 @@ const viewTransactionHistory = (user) => {
   const pin = promptSecret("Enter your pin :");
   console.clear();
 
-  const msg = pin === user.pin
-    ? ` ${user.name}'s Statements\n${user.history.join("\n")}\n`
-    : ` ❌ Invalid pin ${user.name}`;
-  console.log(msg);
+  let [logger, data] = [console.log, `❌ Invalid pin`];
+
+  if (pin === user.pin) {
+    logger = console.table;
+    data = user.history;
+  }
+
+  logger(data);
 };
 
-const recordTransaction = (user, amount) =>
-  user.history.push(
-    `${new Date().toLocaleString()}\t${
-      "Amount Added".padEnd(30)
-    } Amount : ${amount}`,
-  );
+const recordTransaction = (user, Amount) => {
+  const date = new Date().toLocaleString();
+  user.history.push({
+    Date: date,
+    Description: `Deposited Amount`,
+    Amount,
+  });
+};
 
-const depositeAmount = (user, amount, accounts) => {
+const depositAmount = (user, amount, accounts) => {
   user.balance += amount;
   persistAccounts(accounts);
 };
@@ -111,8 +121,8 @@ const addBalance = (user, accounts) => {
   }
 
   recordTransaction(user, amount);
-  console.log(` ✅ Balance added successfully ${user.name}`);
-  depositeAmount(user, amount, accounts);
+  console.log(` ✅ Balance added successfully\n`);
+  depositAmount(user, amount, accounts);
 };
 
 const userMenuActions = {
@@ -125,8 +135,7 @@ const userMenuActions = {
 const grantAccess = (user, accounts) => {
   console.clear();
   while (true) {
-    console.log(`\tWelcome ${user.name}`);
-
+    console.log(` User: ${user.name}`);
     let msg = `\n 1. Check Balance\n 2. Send Money\n `;
     msg += `3. Add Balance\n 4. View Transaction History\n 5. Logout\n\n`;
 

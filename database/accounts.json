@@ -2,25 +2,85 @@
   {
     "name": "Sanket Pawar",
     "phone": "8208878187",
-    "balance": 24243,
+    "balance": 30363,
     "pass": "1234",
     "pin": "1234",
     "history": [
-      "5/1/2026, 4:03:05 pm\tFrom : Archana Pawar\tAmount : 10",
-      "5/1/2026, 4:07:32 pm\tFrom : himanshu jaguri\tAmount : 9999",
-      "5/1/2026, 4:14:48 pm\tFrom : Aniruddha haldar\tAmount : 10000",
-      "5/1/2026, 4:20:51 pm\tAmount Added \tAmount : 1000",
-      "5/1/2026, 4:59:45 pm\tAmount Added                   Amount : 1000",
-      "10/1/2026, 11:49:05 am\tAmount Added                   Amount : 1234"
+      {
+        "Date": "29/1/2026, 9:21:27 pm",
+        "Description": "Paid To: Satish Pawar",
+        "Amount": -1000
+      },
+      {
+        "Date": "29/1/2026, 9:25:18 pm",
+        "Description": "Paid To: Satish Pawar",
+        "Amount": -10000
+      },
+      {
+        "Date": "29/1/2026, 9:30:00 pm",
+        "Description": "Received From: Pradipta Dey",
+        "Amount": 100
+      },
+      {
+        "Date": "29/1/2026, 9:35:31 pm",
+        "Description": "Deposited Amount",
+        "Amount": 10000
+      },
+      {
+        "Date": "29/1/2026, 9:36:30 pm",
+        "Description": "Deposited Amount",
+        "Amount": 10
+      },
+      {
+        "Date": "30/1/2026, 9:27:17 am",
+        "Description": "Paid To: himanshu jaguri",
+        "Amount": -1000
+      },
+      {
+        "Date": "30/1/2026, 9:45:09 am",
+        "Description": "Received From: sandip saha",
+        "Amount": 9000
+      },
+      {
+        "Date": "30/1/2026, 10:25:31 am",
+        "Description": "Deposited Amount",
+        "Amount": 10
+      },
+      {
+        "Date": "30/1/2026, 10:26:12 am",
+        "Description": "Paid To: himanshu jaguri",
+        "Amount": -1100
+      },
+      {
+        "Date": "30/1/2026, 3:07:05 pm",
+        "Description": "Deposited Amount",
+        "Amount": 100
+      },
+      {
+        "Date": "30/1/2026, 3:09:24 pm",
+        "Description": "Paid To: himanshu jaguri",
+        "Amount": -1000
+      }
     ]
   },
   {
     "name": "Satish Pawar",
     "phone": "9850908332",
-    "balance": 2000,
+    "balance": 13000,
     "pass": "4912",
     "pin": "4912",
-    "history": []
+    "history": [
+      {
+        "Date": "29/1/2026, 9:21:27 pm",
+        "Description": "Received From: Sanket Pawar",
+        "Amount": 1000
+      },
+      {
+        "Date": "29/1/2026, 9:25:18 pm",
+        "Description": "Received From: Sanket Pawar",
+        "Amount": 10000
+      }
+    ]
   },
   {
     "name": "Archana Pawar",
@@ -28,18 +88,30 @@
     "balance": 990,
     "pass": "1234",
     "pin": "1234",
-    "history": [
-      "5/1/2026, 4:03:05 pm\tTo : Sanket Pawar\tAmount : 10"
-    ]
+    "history": []
   },
   {
     "name": "himanshu jaguri",
     "phone": "9111111111",
-    "balance": 999999999999,
+    "balance": 1000000003099,
     "pass": "himanshu@123",
     "pin": "2004",
     "history": [
-      "5/1/2026, 4:07:32 pm\tTo : Sanket Pawar\tAmount : 9999"
+      {
+        "Date": "30/1/2026, 9:27:17 am",
+        "Description": "Received From: Sanket Pawar",
+        "Amount": 1000
+      },
+      {
+        "Date": "30/1/2026, 10:26:12 am",
+        "Description": "Received From: Sanket Pawar",
+        "Amount": 1100
+      },
+      {
+        "Date": "30/1/2026, 3:09:24 pm",
+        "Description": "Received From: Sanket Pawar",
+        "Amount": 1000
+      }
     ]
   },
   {
@@ -48,9 +120,7 @@
     "balance": 9990000,
     "pass": "Aniruddha",
     "pin": "1609",
-    "history": [
-      "5/1/2026, 4:14:48 pm\tTo : Sanket Pawar\tAmount : 10000"
-    ]
+    "history": []
   },
   {
     "name": "Nitesh Chaurasiya",
@@ -63,9 +133,39 @@
   {
     "name": "Pradipta Dey",
     "phone": "9876543210",
-    "balance": 1234,
+    "balance": 2134,
     "pass": "1234",
     "pin": "1234",
-    "history": []
+    "history": [
+      {
+        "Date": "29/1/2026, 9:28:20 pm",
+        "Description": "Deposited Amount",
+        "Amount": 1000
+      },
+      {
+        "Date": "29/1/2026, 9:30:00 pm",
+        "Description": "Paid To: Sanket Pawar",
+        "Amount": -100
+      }
+    ]
+  },
+  {
+    "name": "sandip saha",
+    "phone": "9800960950",
+    "balance": 124344,
+    "pass": "hello@123",
+    "pin": "1234",
+    "history": [
+      {
+        "Date": "30/1/2026, 9:45:09 am",
+        "Description": "Paid To: Sanket Pawar",
+        "Amount": -9000
+      },
+      {
+        "Date": "30/1/2026, 9:45:53 am",
+        "Description": "Deposited Amount",
+        "Amount": 123344
+      }
+    ]
   }
 ]
