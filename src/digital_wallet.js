@@ -1,5 +1,5 @@
 import { promptSecret } from "@std/cli";
-import { isUserInvalid, isValidTransactionAmount } from "./validation.js";
+import { isValidTransactionAmount } from "./validation.js";
 import * as UI from "./digital_wallet_ui.js";
 
 export const persistAccounts = (accounts) =>
@@ -151,18 +151,6 @@ const grantAccess = (user, accounts) => {
   }
 };
 
-const readUserDetails = () => {
-  console.clear();
-  console.log("\t| CREATE ACCOUNT |\n");
-  const name = prompt("Enter full name:");
-  const phone = prompt("Enter phone number:");
-  const balance = parseInt(prompt("Enter balance:"));
-  const pass = promptSecret("Enter password for account:");
-  const pin = promptSecret("Enter pin:");
-
-  return { name, phone, balance, pass, pin, history: [] };
-};
-
 const readCredentials = () => {
   console.clear();
   console.log("\t| LOG IN PAGE |\n");
@@ -188,25 +176,18 @@ export const logInUser = (accounts) => {
   grantAccess(user, accounts);
 };
 
-const ERROR_MSGS = {
-  INVALID_NAME: "❌ Invalid name (letters & spaces only, min 3 chars)",
-  INVALID_PHONE: "❌ Invalid phone number",
-  INVALID_PASSWORD: "❌ Password must be at least 4 characters",
-  INVALID_PIN: "❌ Pin must be exactly 4 digits",
-  INVALID_BALANCE: "❌ Invalid balance amount",
-  USER_ALREADY_EXISTS: "❌ User already exists",
-};
+export const createAccount = async (accounts) => {
+  const user = await UI.readCreateAccountInput();
+  console.clear();
 
-export const createAccount = (accounts) => {
-  const user = readUserDetails();
-  const status = isUserInvalid(user, accounts);
-
-  if (status !== "NO_ERROR") {
-    console.log(ERROR_MSGS[status]);
+  if (findUserByPhone(user.phone, accounts)) {
+    UI.displayResult(
+      `⚠️ User already exists with this phone number\n`,
+    );
     return;
   }
 
-  console.log(" ✅ Account created successfully\n");
+  UI.displayResult(" ✅ Account Created Successfully\n");
   accounts.push(user);
   persistAccounts(accounts);
 };
@@ -218,11 +199,13 @@ const MAPPED_HANDLERS = {
 };
 
 export const walletService = async (accounts) => {
+  console.clear();
+
   while (true) {
-    const headLine = "👉 Select an option to continue";
+    const headLine = "👉 Select an option to continue\n";
     const homeActionChoice = await UI.selectFromOptions(headLine, UI.ACTIONS);
 
-    MAPPED_HANDLERS[homeActionChoice](accounts);
+    await MAPPED_HANDLERS[homeActionChoice](accounts);
 
     if (homeActionChoice === "EXIT") break;
   }
