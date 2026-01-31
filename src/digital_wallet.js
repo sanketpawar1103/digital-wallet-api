@@ -1,7 +1,8 @@
 import { promptSecret } from "@std/cli";
 import { isUserInvalid, isValidTransactionAmount } from "./validation.js";
+import * as UI from "./digital_wallet_ui.js";
 
-const persistAccounts = (accounts) =>
+export const persistAccounts = (accounts) =>
   Deno.writeTextFileSync(
     "./database/accounts.json",
     JSON.stringify(accounts, null, 2),
@@ -174,7 +175,7 @@ const readCredentials = () => {
 const findUserByPhone = (credentialsPhone, accounts) =>
   accounts.find((each) => each.phone === credentialsPhone);
 
-const loginUser = (accounts) => {
+export const logInUser = (accounts) => {
   const credentials = readCredentials();
   const user = findUserByPhone(credentials.phone, accounts);
 
@@ -196,7 +197,7 @@ const ERROR_MSGS = {
   USER_ALREADY_EXISTS: "❌ User already exists",
 };
 
-const createAccount = (accounts) => {
+export const createAccount = (accounts) => {
   const user = readUserDetails();
   const status = isUserInvalid(user, accounts);
 
@@ -210,24 +211,19 @@ const createAccount = (accounts) => {
   persistAccounts(accounts);
 };
 
-const homeMenuActions = {
-  1: createAccount,
-  2: loginUser,
-  3: persistAccounts,
+const MAPPED_HANDLERS = {
+  CREATE: createAccount,
+  LOGIN: logInUser,
+  EXIT: persistAccounts,
 };
 
-export const walletService = (accounts) => {
+export const walletService = async (accounts) => {
   while (true) {
-    const msg = ` 1. Create Account\n 2. Log In\n 3. Close Application\n\n`;
-    const choice = prompt(msg);
+    const headLine = "👉 Select an option to continue";
+    const homeActionChoice = await UI.selectFromOptions(headLine, UI.ACTIONS);
 
-    if (!(choice in homeMenuActions) || choice === null) {
-      console.clear();
-      console.log(" ❌ Invalid choice\n");
-      continue;
-    }
+    MAPPED_HANDLERS[homeActionChoice](accounts);
 
-    homeMenuActions[choice](accounts);
-    if (choice === "3") return;
+    if (homeActionChoice === "EXIT") break;
   }
 };

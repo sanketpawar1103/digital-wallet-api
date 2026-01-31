@@ -6,7 +6,7 @@
 
 👉 Select an option to continue
 
-📝  Create New Account  
+📝  Create New Account
 🔑  Log In  
 ❌  Exit Application  
 
