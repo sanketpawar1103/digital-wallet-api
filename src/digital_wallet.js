@@ -122,32 +122,25 @@ const addBalance = (user, accounts) => {
   depositAmount(user, amount, accounts);
 };
 
-const userMenuActions = {
-  1: checkBalance,
-  2: sendMoney,
-  3: addBalance,
-  4: viewTransactionHistory,
+const MAPPED_FEATURES = {
+  BALANCE: checkBalance,
+  SEND_MONEY: sendMoney,
+  DEPOSIT: addBalance,
+  HISTORY: viewTransactionHistory,
 };
 
-const grantAccess = (user, accounts) => {
+const grantAccess = async (user, accounts) => {
   console.clear();
   while (true) {
-    console.log(` User: ${user.name}`);
-    let msg = `\n 1. Check Balance\n 2. Send Money\n `;
-    msg += `3. Add Balance\n 4. View Transaction History\n 5. Logout\n\n`;
+    UI.displayResult(` User: ${user.name}`);
+    const headLine = `👉 Choose an option\n`;
 
-    const choice = prompt(msg);
-    console.clear();
+    const feature = await UI.selectFromOptions(headLine, UI.FEATURES);
 
-    if (choice === "5") return;
+    if (feature === "EXIT") return;
 
-    if (!(choice in userMenuActions)) {
-      console.log(` ❌ Invalid choice ${user.name}`);
-      continue;
-    }
-
-    const action = userMenuActions[choice];
-    action(user, accounts);
+    const functionality = MAPPED_FEATURES[feature];
+    functionality(user, accounts);
   }
 };
 
@@ -159,15 +152,17 @@ export const logInUser = async (accounts) => {
   const user = findUserByPhone(phone, accounts);
 
   if (!user || user.pass !== pass) {
+    console.clear();
     UI.displayResult(" ❌ Credentials mismatch\n");
     return;
   }
 
-  grantAccess(user, accounts);
+  await grantAccess(user, accounts);
 };
 
 export const createAccount = async (accounts) => {
   const user = await UI.readCreateAccCredentials();
+  console.clear();
 
   if (findUserByPhone(user.phone, accounts)) {
     UI.displayResult(
@@ -197,5 +192,6 @@ export const walletService = async (accounts) => {
     await MAPPED_HANDLERS[homeActionChoice](accounts);
 
     if (homeActionChoice === "EXIT") break;
+    console.clear();
   }
 };

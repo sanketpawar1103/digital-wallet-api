@@ -1,15 +1,22 @@
 import { input, number, password, select } from "@inquirer/prompts";
 
-export const displayResult = (msg) => {
-  console.clear();
-  console.log(msg);
-};
-
 export const ACTIONS = [
   { name: "📝  Create New Account", value: "CREATE" },
   { name: "🔑  Log In", value: "LOGIN" },
   { name: "❌  Close Application", value: "EXIT" },
 ];
+
+export const FEATURES = [
+  { name: "💰  Balance Enquiry ", value: "BALANCE" },
+  { name: "💸  Send Money", value: "SEND_MONEY" },
+  { name: "➕💰  Add Balance ", value: "DEPOSIT" },
+  { name: "📊  Transaction History ", value: "HISTORY" },
+  { name: "🚪  Log Out ", value: "EXIT" },
+];
+
+export const displayResult = (msg) => {
+  console.log(msg);
+};
 
 export const selectFromOptions = async (headLine, options) => {
   const choice = await select({ message: headLine, choices: options });
@@ -71,7 +78,7 @@ const readUpiPin = async () => {
 };
 
 export const readCreateAccCredentials = async () => {
-  console.clear();
+  // console.clear();
   console.log("\t| CREATE ACCOUNT |\n");
   const name = await readUserName();
   const phone = await readPhoneNumber(`${"📲  Phone Number".padEnd(21)} :`);
@@ -83,7 +90,7 @@ export const readCreateAccCredentials = async () => {
 };
 
 export const readLogInCredentials = async () => {
-  console.clear();
+  // console.clear();
   console.log("\t| LOG IN PAGE |\n");
   const phone = await readPhoneNumber(`${"📲  Phone Number".padEnd(21)} :`);
   const pass = await readPassword();
