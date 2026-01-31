@@ -22,37 +22,19 @@ export const isValidBalance = (balance) =>
 export const isUserInvalid = (user, accounts) => {
   console.clear();
 
-  if (!isValidName(user.name)) {
-    console.log(" ❌ Invalid name (letters & spaces only, min 3 chars)\n");
-    return true;
-  }
+  if (!isValidName(user.name)) return "INVALID_NAME";
 
-  if (!isValidPhone(user.phone)) {
-    console.log(" ❌ Invalid phone number\n");
-    return true;
-  }
+  if (!isValidPhone(user.phone)) return "INVALID_PHONE";
 
-  if (!isValidPassword(user.pass)) {
-    console.log(" ❌ Password must be at least 4 characters\n");
-    return true;
-  }
+  if (!isValidPassword(user.pass)) return "INVALID_PASSWORD";
 
-  if (!isValidPin(user.pin)) {
-    console.log(" ❌ Pin must be exactly 4 digits\n");
-    return true;
-  }
+  if (!isValidPin(user.pin)) return "INVALID_PIN";
 
-  if (!isValidBalance(user.balance)) {
-    console.log(" ❌ Invalid balance amount\n");
-    return true;
-  }
+  if (!isValidBalance(user.balance)) return "INVALID_BALANCE";
 
-  if (userExistsByPhone(user, accounts)) {
-    console.log(" ❌ User already exists\n");
-    return true;
-  }
+  if (userExistsByPhone(user, accounts)) return "USER_ALREADY_EXISTS";
 
-  return false;
+  return "NO_ERROR";
 };
 
 export const isValidTransactionAmount = (amount) =>

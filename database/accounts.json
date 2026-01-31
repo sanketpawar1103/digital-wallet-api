@@ -167,5 +167,21 @@
         "Amount": 123344
       }
     ]
+  },
+  {
+    "name": "nki",
+    "phone": "9898989898",
+    "balance": 10000,
+    "pass": "1234",
+    "pin": "1234",
+    "history": []
+  },
+  {
+    "name": "akjdslakjldf",
+    "phone": "9090909090",
+    "balance": 100,
+    "pass": "1111",
+    "pin": "1111",
+    "history": []
   }
 ]

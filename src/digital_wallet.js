@@ -1,9 +1,5 @@
 import { promptSecret } from "@std/cli";
-import {
-  isUserInvalid,
-  isValidTransactionAmount,
-  userExistsByPhone,
-} from "./validation.js";
+import { isUserInvalid, isValidTransactionAmount } from "./validation.js";
 
 const persistAccounts = (accounts) =>
   Deno.writeTextFileSync(
@@ -191,9 +187,21 @@ const loginUser = (accounts) => {
   grantAccess(user, accounts);
 };
 
+const ERROR_MSGS = {
+  INVALID_NAME: "❌ Invalid name (letters & spaces only, min 3 chars)",
+  INVALID_PHONE: "❌ Invalid phone number",
+  INVALID_PASSWORD: "❌ Password must be at least 4 characters",
+  INVALID_PIN: "❌ Pin must be exactly 4 digits",
+  INVALID_BALANCE: "❌ Invalid balance amount",
+  USER_ALREADY_EXISTS: "❌ User already exists",
+};
+
 const createAccount = (accounts) => {
   const user = readUserDetails();
-  if (isUserInvalid(user, accounts, userExistsByPhone)) {
+  const status = isUserInvalid(user, accounts);
+
+  if (status !== "NO_ERROR") {
+    console.log(ERROR_MSGS[status]);
     return;
   }
 
