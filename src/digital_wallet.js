@@ -151,25 +151,15 @@ const grantAccess = (user, accounts) => {
   }
 };
 
-const readCredentials = () => {
-  console.clear();
-  console.log("\t| LOG IN PAGE |\n");
-  const phone = prompt("Enter mobile number:");
-  const pass = promptSecret("Enter password :");
-
-  return { phone, pass };
-};
-
 const findUserByPhone = (credentialsPhone, accounts) =>
   accounts.find((each) => each.phone === credentialsPhone);
 
-export const logInUser = (accounts) => {
-  const credentials = readCredentials();
-  const user = findUserByPhone(credentials.phone, accounts);
+export const logInUser = async (accounts) => {
+  const { phone, pass } = await UI.readLogInCredentials();
+  const user = findUserByPhone(phone, accounts);
 
-  if (!user || user.pass !== credentials.pass) {
-    console.clear();
-    console.log(" ❌ Credentials mismatch\n");
+  if (!user || user.pass !== pass) {
+    UI.displayResult(" ❌ Credentials mismatch\n");
     return;
   }
 
@@ -177,8 +167,7 @@ export const logInUser = (accounts) => {
 };
 
 export const createAccount = async (accounts) => {
-  const user = await UI.readCreateAccountInput();
-  console.clear();
+  const user = await UI.readCreateAccCredentials();
 
   if (findUserByPhone(user.phone, accounts)) {
     UI.displayResult(

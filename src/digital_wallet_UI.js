@@ -1,5 +1,10 @@
 import { input, number, password, select } from "@inquirer/prompts";
 
+export const displayResult = (msg) => {
+  console.clear();
+  console.log(msg);
+};
+
 export const ACTIONS = [
   { name: "📝  Create New Account", value: "CREATE" },
   { name: "🔑  Log In", value: "LOGIN" },
@@ -65,7 +70,7 @@ const readUpiPin = async () => {
   return pin;
 };
 
-export const readCreateAccountInput = async () => {
+export const readCreateAccCredentials = async () => {
   console.clear();
   console.log("\t| CREATE ACCOUNT |\n");
   const name = await readUserName();
@@ -77,6 +82,11 @@ export const readCreateAccountInput = async () => {
   return { name, phone, balance, pass, pin, history: [] };
 };
 
-export const displayResult = (msg) => {
-  console.log(msg);
+export const readLogInCredentials = async () => {
+  console.clear();
+  console.log("\t| LOG IN PAGE |\n");
+  const phone = await readPhoneNumber(`${"📲  Phone Number".padEnd(21)} :`);
+  const pass = await readPassword();
+
+  return { phone, pass };
 };
