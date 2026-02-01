@@ -18,67 +18,84 @@ export const displayResult = (msg) => {
   console.log(msg);
 };
 
-export const selectFromOptions = async (headLine, options) => {
-  const choice = await select({ message: headLine, choices: options });
+export const selectFromOptions = async (message, choices) => {
+  const choice = await select({ message, choices });
 
   return choice;
 };
 
 const readUserName = async () => {
+  const nameErr = "* Name must be 3-50 letters only";
+
   const name = await input({
     message: `${"👤  Full Name".padEnd(21)} :`,
-    validate: (name) =>
-      /^[A-Za-z ]{3,50}$/.test(name) ? true : "Name must be 3-50 letters only",
+    validate: (name) => /^[A-Za-z ]{3,50}$/.test(name) ? true : nameErr,
   });
 
   return name;
 };
 
-const readPhoneNumber = async (message) => {
+export const readPhoneNumber = async (message) => {
+  const phoneErr = "* Invalid phone number";
+
   const phone = await input({
     message,
-    validate: (phone) =>
-      /^[6-9]\d{9}$/.test(phone) ? true : "Invalid phone number",
+    validate: (phone) => /^[6-9]\d{9}$/.test(phone) ? true : phoneErr,
   });
 
   return phone;
 };
 
 const readInitialBalance = async () => {
+  const balanceErr = "* Initial balance must be at least of 100rs";
+
   const balance = await number({
     message: `${"💰  Initial Balance".padEnd(21)} :`,
     required: true,
-    validate: (amount) =>
-      amount > 100 ? true : "Initial balance must be at least of 100rs",
+    validate: (amount) => amount > 100 ? true : balanceErr,
   });
 
   return balance;
 };
 
-const readPassword = async () => {
+export const readPassword = async () => {
+  const passErr = "* Password must be at least 4 characters";
+
   const pass = await password({
     message: `${"🔓  Password".padEnd(21)} :`,
     mask: true,
-    validate: (pass) =>
-      /^.{4,}$/.test(pass) ? true : "Password must be at least 4 characters",
+    validate: (pass) => /^.{4,}$/.test(pass) ? true : passErr,
   });
 
   return pass;
 };
 
-const readUpiPin = async () => {
+export const readUpiPin = async () => {
+  const pinErr = "* Pin must be exactly 4 digits";
+
   const pin = await password({
-    message: `🔑  UPI PIN (4-digit) :`,
+    message: `${"🔑  UPI PIN (4-digit)".padEnd(21)} :`,
     mask: true,
-    validate: (pin) =>
-      /^\d{4}$/.test(pin) ? true : "Pin must be exactly 4 digits",
+    validate: (pin) => /^\d{4}$/.test(pin) ? true : pinErr,
   });
 
   return pin;
 };
 
+const readAmount = async () => {
+  const amountErr = "* Enter valid(positive) amount";
+
+  const amount = await number({
+    message: `${"💰  Amount To Send".padEnd(21)} :`,
+    required: true,
+    validate: (amount) => amount > 0 ? true : amountErr,
+  });
+
+  return amount;
+};
+
 export const readCreateAccCredentials = async () => {
-  // console.clear();
+  console.clear();
   console.log("\t| CREATE ACCOUNT |\n");
   const name = await readUserName();
   const phone = await readPhoneNumber(`${"📲  Phone Number".padEnd(21)} :`);
@@ -90,10 +107,22 @@ export const readCreateAccCredentials = async () => {
 };
 
 export const readLogInCredentials = async () => {
-  // console.clear();
+  console.clear();
   console.log("\t| LOG IN PAGE |\n");
   const phone = await readPhoneNumber(`${"📲  Phone Number".padEnd(21)} :`);
   const pass = await readPassword();
 
   return { phone, pass };
+};
+
+export const readTransactCredentials = async (user) => {
+  console.clear();
+  console.log(`User: ${user.name}\n`);
+  const phone = await readPhoneNumber(
+    `${"📲  Receiver's Phone".padEnd(21)} :`,
+  );
+  const amount = await readAmount();
+  const pin = await readUpiPin();
+
+  return { phone, amount, pin };
 };

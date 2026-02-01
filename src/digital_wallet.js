@@ -1,5 +1,9 @@
 import { promptSecret } from "@std/cli";
-import { isValidTransactionAmount } from "./validation.js";
+import {
+  areTransactionDetailsValid,
+  isPinMatch,
+  isValidTransactionAmount,
+} from "./validation.js";
 import * as UI from "./digital_wallet_ui.js";
 
 export const persistAccounts = (accounts) =>
@@ -27,52 +31,45 @@ const applyTransaction = (to, from, info) => {
   from.balance -= info.amount;
 };
 
-const checkBalance = (user) => {
-  console.log(` ${user.name}\n`);
-  const pin = promptSecret(" Enter your pin number :");
+const PIN_FLAGS = {
+  true: (name, balance) =>
+    ` ✅ User : ${name}\n Account Balance = ${balance}\n`,
+  false: (name) => `❗️ Error pin : Pin mismatch ${name}\n`,
+};
+
+const checkBalance = async (user) => {
+  console.clear();
+  UI.displayResult(` ${user.name}\n`);
+  const pin = await UI.readUpiPin();
   console.clear();
 
-  const msg = pin === user.pin
-    ? ` ✅ User : ${user.name}\n Account Balance = ${user.balance}\n`
-    : ` ❌ Invalid Pin ${user.name}\n`;
-  console.log(msg);
+  const transactionsResult = PIN_FLAGS[isPinMatch(pin, user.pin)](
+    user.name,
+    user.balance,
+  );
+
+  UI.displayResult(transactionsResult);
 };
 
-const readTransactionDetails = (user) => {
-  console.log(`User: ${user.name}\n`);
-  const phone = prompt("Enter receiver's phone number :");
-  const amount = parseInt(prompt(" Enter amount :"));
-  const pin = promptSecret(" Enter transaction pin :");
-  console.clear();
-
-  return { phone, amount, pin };
+const TRANSACTION_STATES = {
+  ALL_RIGHT: "✅ Transaction Successful 🎉\n",
+  INVALID_PHONE: "❗️ Error phone : Receiver not found\n",
+  INSUFFICIENT_BALANCE: "❗️ Error balance : Insufficient balance\n",
+  PIN_MISMATCH: "❗️ Error pin : Pin mismatch\n",
 };
 
-const areTransactionDetailsValid = (user, accounts, details) => {
-  const receiver = accounts.find((each) => each.phone === details.phone);
+const sendMoney = async (user, accounts) => {
+  const transactionDetails = await UI.readTransactCredentials(user);
+  const transactionStatus = areTransactionDetailsValid(
+    user,
+    accounts,
+    transactionDetails,
+  );
 
-  if (!receiver || receiver.phone === user.phone) {
-    console.log(" ❌ Receiver not present\n");
-    return false;
-  } else if (!isValidTransactionAmount(details.amount)) {
-    console.log(` ❌ Invalid amount value\n`);
-    return false;
-  } else if (user.balance < details.amount) {
-    console.log(` ❌ Insufficient balance\n Balance = ${user.balance}\n`);
-    return false;
-  } else if (user.pin !== details.pin) {
-    console.log(` ❌ Incorrect Pin\n Entered pin = ${details.pin}\n`);
-    return false;
-  }
+  UI.displayResult(TRANSACTION_STATES[transactionStatus]);
 
-  applyTransaction(receiver, user, details);
-  return true;
-};
-
-const sendMoney = (user, accounts) => {
-  const transactionDetails = readTransactionDetails(user);
-  if (areTransactionDetailsValid(user, accounts, transactionDetails)) {
-    console.log(` ✅ Transaction Successful\n`);
+  if (transactionStatus === "ALL_RIGHT") {
+    applyTransaction(receiver, user, details);
     persistAccounts(accounts);
   }
 };
@@ -140,7 +137,7 @@ const grantAccess = async (user, accounts) => {
     if (feature === "EXIT") return;
 
     const functionality = MAPPED_FEATURES[feature];
-    functionality(user, accounts);
+    await functionality(user, accounts);
   }
 };
 
