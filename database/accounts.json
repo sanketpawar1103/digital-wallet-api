@@ -2,7 +2,7 @@
   {
     "name": "Sanket Pawar",
     "phone": "8208878187",
-    "balance": 30363,
+    "balance": 31363,
     "pass": "1234",
     "pin": "1234",
     "history": [
@@ -60,6 +60,11 @@
         "Date": "30/1/2026, 3:09:24 pm",
         "Description": "Paid To: himanshu jaguri",
         "Amount": -1000
+      },
+      {
+        "Date": "1/2/2026, 10:31:33 am",
+        "Description": "Deposited Amount",
+        "Amount": 1000
       }
     ]
   },

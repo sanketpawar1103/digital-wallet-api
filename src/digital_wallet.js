@@ -1,9 +1,4 @@
-import { promptSecret } from "@std/cli";
-import {
-  areTransactionDetailsValid,
-  isPinMatch,
-  isValidTransactionAmount,
-} from "./validation.js";
+import { areTransactionDetailsValid, isPinMatch } from "./validation.js";
 import * as UI from "./digital_wallet_ui.js";
 
 export const persistAccounts = (accounts) =>
@@ -32,23 +27,18 @@ const applyTransaction = (to, from, info) => {
 };
 
 const PIN_FLAGS = {
-  true: (name, balance) =>
-    ` ✅ User : ${name}\n Account Balance = ${balance}\n`,
-  false: (name) => `❗️ Error pin : Pin mismatch ${name}\n`,
+  true: (successMsg, logger = console.log) =>
+    UI.displayResult(successMsg, logger),
+  false: () => UI.displayResult(`❗️ Error pin : Pin mismatch\n`),
 };
 
 const checkBalance = async (user) => {
   console.clear();
   UI.displayResult(` ${user.name}\n`);
   const pin = await UI.readUpiPin();
-  console.clear();
+  const balanceSuccessMsg = ` 🤑 Available Balance : ${user.balance}\n`;
 
-  const transactionsResult = PIN_FLAGS[isPinMatch(pin, user.pin)](
-    user.name,
-    user.balance,
-  );
-
-  UI.displayResult(transactionsResult);
+  PIN_FLAGS[isPinMatch(pin, user.pin)](balanceSuccessMsg);
 };
 
 const TRANSACTION_STATES = {
@@ -74,19 +64,13 @@ const sendMoney = async (user, accounts) => {
   }
 };
 
-const viewTransactionHistory = (user) => {
+const viewTransactionHistory = async (user) => {
+  console.clear();
   console.log(` ${user.name}\n`);
-  const pin = promptSecret("Enter your pin :");
+  const pin = await UI.readUpiPin();
   console.clear();
 
-  let [logger, data] = [console.log, `❌ Invalid pin`];
-
-  if (pin === user.pin) {
-    logger = console.table;
-    data = user.history;
-  }
-
-  logger(data);
+  PIN_FLAGS[isPinMatch(pin, user.pin)](user.history, console.table);
 };
 
 const recordTransaction = (user, Amount) => {
@@ -103,19 +87,18 @@ const depositAmount = (user, amount, accounts) => {
   persistAccounts(accounts);
 };
 
-const addBalance = (user, accounts) => {
-  console.log(` ${user.name}\n`);
-  const amount = parseInt(prompt("Enter amount :"));
-  const pin = promptSecret("Enter pin :");
-  console.clear();
+const addBalance = async (user, accounts) => {
+  UI.displayResult(` ${user.name}\n`);
+  const { amount, pin } = await UI.readAddBalanceDetails();
 
-  if (pin !== user.pin || !isValidTransactionAmount(amount)) {
-    console.log(` ❌ Invalid pin or amount value ${user.name}`);
+  if (!isPinMatch(pin, user.pin)) {
+    PIN_FLAGS["false"]();
     return;
   }
 
   recordTransaction(user, amount);
-  console.log(` ✅ Balance added successfully\n`);
+  PIN_FLAGS["true"](` ✅ Balance added successfully\n`);
+
   depositAmount(user, amount, accounts);
 };
 

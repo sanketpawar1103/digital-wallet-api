@@ -14,8 +14,8 @@ export const FEATURES = [
   { name: "🚪  Log Out ", value: "EXIT" },
 ];
 
-export const displayResult = (msg) => {
-  console.log(msg);
+export const displayResult = (msg, logger = console.log) => {
+  logger(msg);
 };
 
 export const selectFromOptions = async (message, choices) => {
@@ -82,11 +82,11 @@ export const readUpiPin = async () => {
   return pin;
 };
 
-const readAmount = async () => {
+const readAmount = async (message) => {
   const amountErr = "* Enter valid(positive) amount";
 
   const amount = await number({
-    message: `${"💰  Amount To Send".padEnd(21)} :`,
+    message,
     required: true,
     validate: (amount) => amount > 0 ? true : amountErr,
   });
@@ -102,6 +102,7 @@ export const readCreateAccCredentials = async () => {
   const balance = await readInitialBalance();
   const pass = await readPassword();
   const pin = await readUpiPin();
+  console.clear();
 
   return { name, phone, balance, pass, pin, history: [] };
 };
@@ -111,6 +112,7 @@ export const readLogInCredentials = async () => {
   console.log("\t| LOG IN PAGE |\n");
   const phone = await readPhoneNumber(`${"📲  Phone Number".padEnd(21)} :`);
   const pass = await readPassword();
+  console.clear();
 
   return { phone, pass };
 };
@@ -121,8 +123,18 @@ export const readTransactCredentials = async (user) => {
   const phone = await readPhoneNumber(
     `${"📲  Receiver's Phone".padEnd(21)} :`,
   );
-  const amount = await readAmount();
+  const amount = await readAmount(`${"💰  Amount To Send".padEnd(21)} :`);
   const pin = await readUpiPin();
+  console.clear();
 
   return { phone, amount, pin };
+};
+
+export const readAddBalanceDetails = async () => {
+  console.clear();
+  const amount = await readAmount(`${"💰  Amount To Deposit".padEnd(21)} :`);
+  const pin = await readUpiPin();
+  console.clear();
+
+  return { amount, pin };
 };

@@ -10,7 +10,7 @@ export const areTransactionDetailsValid = (user, accounts, details) => {
 
   if (user.balance < details.amount) return "INSUFFICIENT_BALANCE";
 
-  if (isPinMatch(user.pin, details.pin)) return "PIN_MISMATCH";
+  if (!isPinMatch(user.pin, details.pin)) return "PIN_MISMATCH";
 
   return "ALL_RIGHT";
 };
