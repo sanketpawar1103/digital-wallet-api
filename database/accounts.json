@@ -65,6 +65,16 @@
         "Date": "1/2/2026, 10:31:33 am",
         "Description": "Deposited Amount",
         "Amount": 1000
+      },
+      {
+        "Date": "5/2/2026, 2:30:11 pm",
+        "Description": "Paid To: himanshu jaguri",
+        "Amount": -100
+      },
+      {
+        "Date": "5/2/2026, 2:31:39 pm",
+        "Description": "Deposited Amount",
+        "Amount": 100
       }
     ]
   },
@@ -98,7 +108,7 @@
   {
     "name": "himanshu jaguri",
     "phone": "9111111111",
-    "balance": 1000000003099,
+    "balance": 1000000003199,
     "pass": "himanshu@123",
     "pin": "2004",
     "history": [
@@ -116,6 +126,11 @@
         "Date": "30/1/2026, 3:09:24 pm",
         "Description": "Received From: Sanket Pawar",
         "Amount": 1000
+      },
+      {
+        "Date": "5/2/2026, 2:30:11 pm",
+        "Description": "Received From: Sanket Pawar",
+        "Amount": 100
       }
     ]
   },

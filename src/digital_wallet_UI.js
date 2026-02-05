@@ -120,14 +120,14 @@ export const readLogInCredentials = async () => {
 export const readTransactCredentials = async (user) => {
   console.clear();
   console.log(`User: ${user.name}\n`);
-  const phone = await readPhoneNumber(
+  const receiver = await readPhoneNumber(
     `${"📲  Receiver's Phone".padEnd(21)} :`,
   );
   const amount = await readAmount(`${"💰  Amount To Send".padEnd(21)} :`);
   const pin = await readUpiPin();
   console.clear();
 
-  return { phone, amount, pin };
+  return { receiver, amount, pin };
 };
 
 export const readAddBalanceDetails = async () => {
