@@ -1,6 +1,11 @@
 import * as UI from "./digital_wallet_ui.js";
 import { transactionHandler } from "./transactions.js";
 
+export const fetchAccounts = () =>
+  JSON.parse(
+    Deno.readTextFileSync("./database/accounts.json"),
+  );
+
 export const persistAccounts = (accounts) =>
   Deno.writeTextFileSync(
     "./database/accounts.json",
@@ -28,9 +33,9 @@ export const applyTransaction = (sender, receiver, amount) => {
 };
 
 export const PIN_FLAGS = {
-  true: (successMsg, logger = console.log) =>
-    UI.displayResult(successMsg, logger),
-  false: () => UI.displayResult(`❗️ Error pin : Pin mismatch\n`),
+  true: async (successMsg, logger = console.log) =>
+    await UI.displayResult(successMsg, logger),
+  false: async () => await UI.displayResult(`❗️ Error pin : Pin mismatch\n`),
 };
 
 export const TRANSACTION_STATES = {
@@ -62,19 +67,17 @@ const MAPPED_FEATURES = {
 };
 
 const grantAccess = async (user, accounts) => {
-  console.clear();
-  const tHandle = new transactionHandler(accounts);
+  const transaction = new transactionHandler(accounts);
 
   while (true) {
-    UI.displayResult(` User: ${user.name}`);
+    UI.header(`👤 User: ${user.name}\n🧭 Action Page`);
     const headLine = `👉 Choose an option\n`;
-
     const feature = await UI.selectFromOptions(headLine, UI.FEATURES);
 
     if (feature === "EXIT") return;
 
     const functionality = MAPPED_FEATURES[feature];
-    await tHandle[functionality](user);
+    await transaction[functionality](user);
   }
 };
 
@@ -85,27 +88,29 @@ export const logInUser = async (accounts) => {
   const { phone, pass } = await UI.readLogInCredentials();
   const user = findUserByPhone(phone, accounts);
 
-  if (!user || user.pass !== pass) {
+  if (user && user.pass === pass) {
     console.clear();
-    UI.displayResult(" ❌ Credentials mismatch\n");
+    await grantAccess(user, accounts);
     return;
   }
 
-  await grantAccess(user, accounts);
+  await UI.displayResult(
+    "❌ Credentials Mismatch\n",
+  );
 };
 
 export const createAccount = async (accounts) => {
   const user = await UI.readCreateAccCredentials();
-  console.clear();
 
   if (findUserByPhone(user.phone, accounts)) {
-    UI.displayResult(
+    await UI.displayResult(
       `⚠️ User already exists with this phone number\n`,
     );
+
     return;
   }
 
-  UI.displayResult(" ✅ Account Created Successfully\n");
+  await UI.displayResult(`✅ Account Created Successfully\n`);
   accounts.push(user);
   persistAccounts(accounts);
 };
@@ -117,9 +122,8 @@ const MAPPED_HANDLERS = {
 };
 
 export const walletService = async (accounts) => {
-  console.clear();
-
   while (true) {
+    UI.header(`\t🏦 DIGITAL WALLET 🏦`);
     const headLine = "👉 Select an option to continue\n";
     const homeActionChoice = await UI.selectFromOptions(headLine, UI.ACTIONS);
 

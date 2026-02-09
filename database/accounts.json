@@ -2,7 +2,7 @@
   {
     "name": "Sanket Pawar",
     "phone": "8208878187",
-    "balance": 31363,
+    "balance": 29485,
     "pass": "1234",
     "pin": "1234",
     "history": [
@@ -75,13 +75,43 @@
         "Date": "5/2/2026, 2:31:39 pm",
         "Description": "Deposited Amount",
         "Amount": 100
+      },
+      {
+        "Date": "9/2/2026, 10:50:01 am",
+        "Description": "Deposited Amount",
+        "Amount": 112
+      },
+      {
+        "Date": "9/2/2026, 11:03:57 am",
+        "Description": "Deposited Amount",
+        "Amount": 100
+      },
+      {
+        "Date": "9/2/2026, 11:10:00 am",
+        "Description": "Paid To: Satish Pawar",
+        "Amount": -1000
+      },
+      {
+        "Date": "9/2/2026, 11:11:48 am",
+        "Description": "Paid To: Satish Pawar",
+        "Amount": -100
+      },
+      {
+        "Date": "9/2/2026, 12:36:08 pm",
+        "Description": "Paid To: Satish Pawar",
+        "Amount": -1000
+      },
+      {
+        "Date": "9/2/2026, 12:36:46 pm",
+        "Description": "Deposited Amount",
+        "Amount": 10
       }
     ]
   },
   {
     "name": "Satish Pawar",
     "phone": "9850908332",
-    "balance": 13000,
+    "balance": 15100,
     "pass": "4912",
     "pin": "4912",
     "history": [
@@ -94,6 +124,21 @@
         "Date": "29/1/2026, 9:25:18 pm",
         "Description": "Received From: Sanket Pawar",
         "Amount": 10000
+      },
+      {
+        "Date": "9/2/2026, 11:10:00 am",
+        "Description": "Received From: Sanket Pawar",
+        "Amount": 1000
+      },
+      {
+        "Date": "9/2/2026, 11:11:48 am",
+        "Description": "Received From: Sanket Pawar",
+        "Amount": 100
+      },
+      {
+        "Date": "9/2/2026, 12:36:08 pm",
+        "Description": "Received From: Sanket Pawar",
+        "Amount": 1000
       }
     ]
   },
@@ -218,6 +263,22 @@
     "balance": 1100,
     "pass": "1111",
     "pin": "1111",
+    "history": []
+  },
+  {
+    "name": "raju",
+    "phone": "9890909090",
+    "balance": 1000,
+    "pass": "12345",
+    "pin": "1234",
+    "history": []
+  },
+  {
+    "name": "sdfasd",
+    "phone": "9234523434",
+    "balance": 1013,
+    "pass": "4534",
+    "pin": "4534",
     "history": []
   }
 ]

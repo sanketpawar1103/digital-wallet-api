@@ -1,5 +1,15 @@
 import { input, number, password, select } from "@inquirer/prompts";
 
+const outline = () => console.log("=".repeat(40));
+
+export const header = (headLine) => {
+  console.clear();
+  outline();
+  console.log(headLine);
+  outline();
+  console.log();
+};
+
 export const ACTIONS = [
   { name: "📝  Create New Account", value: "CREATE" },
   { name: "🔑  Log In", value: "LOGIN" },
@@ -14,8 +24,15 @@ export const FEATURES = [
   { name: "🚪  Log Out ", value: "EXIT" },
 ];
 
-export const displayResult = (msg, logger = console.log) => {
+export const displayResult = async (msg, logger = console.log) => {
+  console.log();
+  outline();
+  console.log("\nOutput Screen :\n");
   logger(msg);
+  console.log(`${"-".repeat(40)}`);
+
+  await input({ message: "Press Enter To Continue : " });
+  console.clear();
 };
 
 export const selectFromOptions = async (message, choices) => {
@@ -95,46 +112,39 @@ const readAmount = async (message) => {
 };
 
 export const readCreateAccCredentials = async () => {
-  console.clear();
-  console.log("\t| CREATE ACCOUNT |\n");
+  header("\t 🧾 Create Account");
   const name = await readUserName();
   const phone = await readPhoneNumber(`${"📲  Phone Number".padEnd(21)} :`);
   const balance = await readInitialBalance();
   const pass = await readPassword();
   const pin = await readUpiPin();
-  console.clear();
 
   return { name, phone, balance, pass, pin, history: [] };
 };
 
 export const readLogInCredentials = async () => {
-  console.clear();
-  console.log("\t| LOG IN PAGE |\n");
+  header("\t🔐 Log In");
   const phone = await readPhoneNumber(`${"📲  Phone Number".padEnd(21)} :`);
   const pass = await readPassword();
-  console.clear();
 
   return { phone, pass };
 };
 
-export const readTransactCredentials = async (user) => {
-  console.clear();
-  console.log(`User: ${user.name}\n`);
+export const readTransactCredentials = async (userName) => {
+  header(`👤 User : ${userName}\n💸 Send Money`);
   const receiver = await readPhoneNumber(
     `${"📲  Receiver's Phone".padEnd(21)} :`,
   );
   const amount = await readAmount(`${"💰  Amount To Send".padEnd(21)} :`);
   const pin = await readUpiPin();
-  console.clear();
 
   return { receiver, amount, pin };
 };
 
-export const readAddBalanceDetails = async () => {
-  console.clear();
+export const readAddBalanceDetails = async (userName) => {
+  header(`👤 User : ${userName}\n➕💰 Add Balance`);
   const amount = await readAmount(`${"💰  Amount To Deposit".padEnd(21)} :`);
   const pin = await readUpiPin();
-  console.clear();
 
   return { amount, pin };
 };

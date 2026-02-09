@@ -8,43 +8,41 @@ export class transactionHandler {
   }
 
   async checkBalance(user) {
-    console.clear();
-    UI.displayResult(` ${user.name}\n`);
+    UI.header(`👤 ${user.name}\n💰 Check Balance`);
     const pin = await UI.readUpiPin();
-    const balanceSuccessMsg = ` 🤑 Available Balance : ${user.balance}\n`;
+    const balanceSuccessMsg = `🤑 Available Balance : ${user.balance}\n`;
 
-    wallet.PIN_FLAGS[validation.isPinMatch(pin, user.pin)](balanceSuccessMsg);
+    await wallet.PIN_FLAGS[validation.isPinMatch(pin, user.pin)](
+      balanceSuccessMsg,
+    );
   }
 
   async addBalance(user) {
-    UI.displayResult(` ${user.name}\n`);
-    const { amount, pin } = await UI.readAddBalanceDetails();
+    const { amount, pin } = await UI.readAddBalanceDetails(user.name);
 
     if (!validation.isPinMatch(pin, user.pin)) {
-      wallet.PIN_FLAGS["false"]();
+      await wallet.PIN_FLAGS["false"]();
       return;
     }
 
     wallet.recordTransaction(user, amount);
-    wallet.PIN_FLAGS["true"](` ✅ Balance added successfully\n`);
-
     wallet.depositAmount(user, amount, this.accounts);
+
+    await wallet.PIN_FLAGS["true"](`✅ Balance added successfully\n`);
   }
 
   async viewTransactionHistory(user) {
-    console.clear();
-    console.log(` ${user.name}\n`);
+    UI.header(`👤 ${user.name}\n📊 Transaction History`);
     const pin = await UI.readUpiPin();
-    console.clear();
 
-    wallet.PIN_FLAGS[validation.isPinMatch(pin, user.pin)](
+    await wallet.PIN_FLAGS[validation.isPinMatch(pin, user.pin)](
       user.history,
       console.table,
     );
   }
 
   async sendMoney(user) {
-    const transactionDetails = await UI.readTransactCredentials(user);
+    const transactionDetails = await UI.readTransactCredentials(user.name);
     const transactionStatus = validation.isValidTransaction(
       user,
       this.accounts,
@@ -60,6 +58,6 @@ export class transactionHandler {
       wallet.persistAccounts(this.accounts);
     }
 
-    UI.displayResult(wallet.TRANSACTION_STATES[transactionStatus]);
+    await UI.displayResult(wallet.TRANSACTION_STATES[transactionStatus]);
   }
 }
