@@ -25,9 +25,8 @@ export class transactionHandler {
       return;
     }
 
-    wallet.recordTransaction(user, amount);
-    wallet.depositAmount(user, amount, this.accounts);
-
+    wallet.depositAmount(user, amount);
+    wallet.persistAccounts(this.accounts);
     await wallet.PIN_FLAGS["true"](`✅ Balance added successfully\n`);
   }
 
@@ -43,6 +42,7 @@ export class transactionHandler {
 
   async sendMoney(user) {
     const transactionDetails = await UI.readTransactCredentials(user.name);
+    this.accounts = wallet.fetchAccounts();
     const transactionStatus = validation.isValidTransaction(
       user,
       this.accounts,
@@ -54,6 +54,7 @@ export class transactionHandler {
         transactionDetails.receiver,
         this.accounts,
       );
+
       wallet.applyTransaction(user, receiver, transactionDetails.amount);
       wallet.persistAccounts(this.accounts);
     }

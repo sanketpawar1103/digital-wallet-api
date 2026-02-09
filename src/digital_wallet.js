@@ -45,18 +45,15 @@ export const TRANSACTION_STATES = {
   PIN_MISMATCH: "❗️ Error pin : Pin mismatch\n",
 };
 
-export const recordTransaction = (user, Amount) => {
+export const depositAmount = (user, Amount) => {
   const date = new Date().toLocaleString();
   user.history.push({
     Date: date,
     Description: `Deposited Amount`,
     Amount,
   });
-};
 
-export const depositAmount = (user, amount, accounts) => {
   user.balance += amount;
-  persistAccounts(accounts);
 };
 
 const MAPPED_FEATURES = {
