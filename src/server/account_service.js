@@ -1,5 +1,5 @@
-import * as UI from "./digital_wallet_ui.js";
-import { transactionHandler } from "./transactions.js";
+import * as UI from "../frontend/cli_view.js";
+import { transactionHandler } from "./transaction_service.js";
 
 export const fetchAccounts = () =>
   JSON.parse(

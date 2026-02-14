@@ -1,4 +1,4 @@
-import { fetchAccounts, walletService } from "./src/digital_wallet.js";
+import { fetchAccounts, walletService } from "./src/backend/account_service.js";
 
 const main = () => {
   console.clear();
