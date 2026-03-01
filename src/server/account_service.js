@@ -1,4 +1,4 @@
-import * as UI from "../frontend/cli_view.js";
+import * as UI from "../client/cli_view.js";
 import { transactionHandler } from "./transaction_service.js";
 
 export const fetchAccounts = () =>

@@ -1,5 +1,5 @@
 import * as services from "./account_service.js";
-import * as UI from "../frontend/cli_view.js";
+import * as UI from "../client/cli_view.js";
 import * as validation from "./validator.js";
 
 export class transactionHandler {
