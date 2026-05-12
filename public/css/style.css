@@ -1,0 +1,30 @@
+* {
+  padding: 0%;
+  margin: 0;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.auth-page-link {
+  text-decoration: none;
+}
+
+.auth-item {
+  font-size: 25px;
+  padding: 10px;
+}
+
+.submit {
+  font-size: 25px;
+  border-radius: 50px;
+  padding: 5px 20px;
+}
+
+.form {
+  border: 2px solid rgba(0, 0, 0, 0.5);
+  margin: 10px 0;
+  padding: 10px;
+  width: 20%;
+}

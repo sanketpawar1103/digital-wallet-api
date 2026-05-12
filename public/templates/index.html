@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <link rel="stylesheet" href="/css/style.css">
+  <title>Document</title>
+</head>
+
+<body>
+  <header class="page-head">
+    <h1>Welcome To the Digital Wallet</h1>
+
+    <% if (!it.isLoggedUser) { %>
+      <a href="/authentication.html" class="auth-page-link">Authentication forms</a>
+      <% } else { %>
+        <form action="/logout" method="POST">
+          <div class="logout">
+            <label for="logout" id="logout-lable">
+              <%= it.username %>
+            </label>
+            <button type="submit" name="logout" id="logout-button">Logout</button>
+        </form>
+        </div>
+        <% } %>
+
+  </header>
+</body>
+
+</html>

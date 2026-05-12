@@ -2,3 +2,4 @@
 database/
 deno.json
 deno.lock
+frontend/node_modules/

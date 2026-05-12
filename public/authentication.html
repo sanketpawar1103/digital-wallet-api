@@ -2,13 +2,58 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/style.css">
   <title>Document</title>
 </head>
 
 <body>
-  <h1>Authentication Page</h1>
+  <header class="page-head">
+    <h1>Authentication Page</h1>
+  </header>
+
+  <main id="auth-body">
+    <section>
+      <header class="auth-head">
+        <h1>Sign In</h1>
+      </header>
+      <form action="/signin" method="POST" class="form">
+        <div class="auth-item">
+          <label for="phone">Phone Number</label>
+          <input type="text" name="phone" required>
+        </div>
+        <div class="auth-item">
+          <label for="pass">Password</label>
+          <input type="text" name="password" required>
+        </div>
+        <button type="submit" class="submit">Sign in</button>
+      </form>
+    </section>
+
+    <section>
+      <header class="auth-head">
+        <h1>Sign Up</h1>
+      </header>
+      <form action="/signup" method="POST" class="form">
+        <div class="auth-item">
+          <label for="username">Username</label>
+          <input type="text" name="username" required>
+        </div>
+        <div class="auth-item">
+          <label for="phone">Phone Number</label>
+          <input type="text" name="phone" required>
+        </div>
+        <div class="auth-item">
+          <label for="pass">Password</label>
+          <input type="text" name="password" required>
+        </div>
+        <div class="auth-item">
+          <label for="pass">Pin</label>
+          <input type="text" name="pin" required>
+        </div>
+        <button type="submit" class="submit">Sign Up</button>
+      </form>
+    </section>
+  </main>
 </body>
 
 </html>
